@@ -41,6 +41,7 @@ RegisterStaffActionsInsertListener = function()
                         description = quest:getDescription(),
                         XP = quest:getXP(),
                         steps = quest:getSteps(),
+                        skillsReference = quest:getSkillsReference(),
                         hidden = quest:getHidden(),
                     })
                 end
@@ -59,7 +60,7 @@ RegisterStaffActionsInsertListener = function()
 
                 Trees[tree:getId()] = tree
 
-                TriggerClientEvent("peakville_skills:newNewTreeCreated", -1, {
+                TriggerClientEvent("peakville_skills:newTreeCreated", -1, {
                     id = tree:getId(),
                     name = tree:getName(),
                     description = tree:getDescription(),
@@ -114,24 +115,24 @@ RegisterStaffActionsEditListener = function()
             if data.name then quest:setName(data.name) end
             if data.description then quest:setDescription(data.description) end
             if data.XP then quest:setXP(data.XP) end
-            if data.types then quest:setTypes(data.types) end
             if data.steps then quest:setSteps(data.steps) end
-            if data.tree then quest:setTree(data.tree) end
+            if data.skillsReference then quest:setSkillsReference(data.skillsReference) end
+            if data.hidden ~= nil then quest:setHidden(data.hidden) end
             return quest
         end)
 
         if questObjUpdated and updatedQuest then
             local questUpdatedOnDb, _ = pcall(function() UpdateQuestOnDb(updatedQuest) end)
             if questUpdatedOnDb then
-                if updatedQuest:getTypes() ~= QUEST_TYPES["DAILY"] then
+                if not updatedQuest:getHidden() then
                     TriggerClientEvent("peakville_skills:questUpdated", -1, {
                         id = updatedQuest:getId(),
                         name = updatedQuest:getName(),
                         description = updatedQuest:getDescription(),
                         XP = updatedQuest:getXP(),
-                        types = updatedQuest:getTypes(),
                         steps = updatedQuest:getSteps(),
-                        tree = updatedQuest:getTree(),
+                        skillsReference = updatedQuest:getSkillsReference(),
+                        hidden = updatedQuest:getHidden(),
                     })
                 end
             end

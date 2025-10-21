@@ -38,7 +38,6 @@ end
 function PlayerQuest:serialize()
     return {
         questId = self.quest:getId(),
-        playerId = self.player:getId(),
         completed = self.completed,
         currentStep = self.currentStep
     }

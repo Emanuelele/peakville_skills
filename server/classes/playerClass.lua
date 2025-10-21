@@ -37,8 +37,9 @@ function Player:save()
     SavePlayerData(self)
 end
 
-function Player:GetPlayerDataSerialized()
+function Player:serialize()
     return {
+        identifier = self.identifier,
         level = self.level,
         XP = self.XP,
         tokens = self.tokens,

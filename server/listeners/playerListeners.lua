@@ -15,7 +15,7 @@ RegisterPlayerListener = function()
 
         Players[src] = player
 
-        TriggerClientEvent("peakville_skills:init", src, player:GetPlayerDataSerialized())
+        TriggerClientEvent("peakville_skills:init", src, player:serialize())
     end)
 
     RegisterNetEvent('esx:onPlayerLogout', function(src)
@@ -42,6 +42,6 @@ RegisterPlayerListener = function()
 
         Players[src] = player
 
-        TriggerClientEvent("peakville_skills:init", src, player:GetPlayerDataSerialized())
+        TriggerClientEvent("peakville_skills:init", src, player:serialize())
     end)
 end
