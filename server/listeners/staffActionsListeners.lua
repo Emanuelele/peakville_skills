@@ -35,17 +35,15 @@ RegisterStaffActionsInsertListener = function()
 
                 Quests[quest:getId()] = quest
 
-                if quest:getType() ~= QUEST_TYPES["DAILY"] then
-                    TriggerClientEvent("peakville_skills:newQuestCreated", -1, {
-                        id = quest:getId(),
-                        name = quest:getName(),
-                        description = quest:getDescription(),
-                        XP = quest:getXP(),
-                        type = quest:getType(),
-                        steps = quest:getSteps(),
-                        tree = quest:getTree(),
-                    })
-                end
+                TriggerClientEvent("peakville_skills:newQuestCreated", -1, {
+                    id = quest:getId(),
+                    name = quest:getName(),
+                    description = quest:getDescription(),
+                    XP = quest:getXP(),
+                    steps = quest:getSteps(),
+                    tree = quest:getTree(),
+                })
+                
             end
         end
     end)

@@ -2,11 +2,10 @@
 PlayerQuest = {}
 PlayerQuest.__index = PlayerQuest
 
---Per questa classe non fare una tabella in quanto i dati risiedono dentro player, se serve fare solo serializzazione
 function PlayerQuest:new(quest, player, playerQuestData)
     self = setmetatable({}, PlayerQuest)
-    self.quest = quest --Riferimento alla classe quest
-    self.player = player
+    self.quest = quest --In fase di serializzazione salviamo solo l'id della quest
+    self.player = player --In fase di serializzazione salviamo solo l'identificativo del player
     self.completed = playerQuestData and playerQuestData.completed or false
     self.currentStep = playerQuestData and playerQuestData.currentStep or 0
     return self

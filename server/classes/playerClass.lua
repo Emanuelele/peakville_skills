@@ -10,10 +10,10 @@ function Player:new(xPlayer, playerData)
     self.XP = playerData.XP or 0
     self.tokens = playerData.tokens or Config.StartTokens
 
-    self.currentTrees = playerData.currentTrees or {}
+    self.currentTrees = playerData.currentTrees or {} --Riferimento agli id degli alberi sbloccati (array)
 
-    self.quests = playerData.quests or {} --Tabella indicizzaa di oggetti di tipo playerQyest
-    self.skills = playerData.skills or {}
+    self.quests = playerData.quests or {} --Oggetti serializzati di tipo playerQuest (array index)
+    self.skills = playerData.skills or {} --Riferimento agli id delle skill sbloccate (array)
     return self
 end
 

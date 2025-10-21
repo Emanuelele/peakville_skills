@@ -9,9 +9,9 @@ function Skill:new(skillData)
     self.image = skillData.image or ""
     self.basePrice = skillData.basePrice or 1
 
-    self.parentTree = skillData.parentTree or 0
-    self.previousSkills = skillData.previousSkills or {}
-    self.nextSkills = skillData.nextSkills or {}
+    self.parentTree = skillData.parentTree or 0 --Riferimento all'id dell'albero genitore
+    self.previousSkills = skillData.previousSkills or {} --Riferimento agli id delle skill precedenti (array)
+    self.nextSkills = skillData.nextSkills or {} --Riferimento agli id delle skill successive (array)
 
     return self
 end

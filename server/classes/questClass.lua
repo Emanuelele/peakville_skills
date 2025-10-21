@@ -7,9 +7,8 @@ function Quest:new(questData)
     self.name = questData.name or ""
     self.description = questData.description or ""
     self.XP = questData.XP or 1
-    self.type = questData.type or QUEST_TYPES["GENERAL"]
     self.steps = questData.steps or 1
-    self.skillsReference = questData.skillsReference or {}
+    self.skillsReference = questData.skillsReference or {} --Riferimento agli id delle skill a cui la quest fa riferimento (puoi completare la quest se possiedi queste skill) (array)
     return self
 end
 
@@ -32,10 +31,6 @@ function Quest:getXP()
     return self.XP
 end
 
-function Quest:getType()
-    return self.type
-end
-
 function Quest:getSteps()
     return self.steps
 end
@@ -44,6 +39,9 @@ function Quest:getTree()
     return self.tree
 end
 
+function Quest:getSkillsReference()
+    return self.skillsReference
+end
 
 --[[ SETTERS ]]
 
@@ -59,14 +57,14 @@ function Quest:setXP(XP)
     self.XP = XP
 end
 
-function Quest:setType(type)
-    self.type = type
-end
-
 function Quest:setSteps(steps)
     self.steps = steps
 end
 
 function Quest:setTree(tree)
     self.tree = tree
+end
+
+function Quest:setSkillsReference(skillsReference)
+    self.skillsReference = skillsReference
 end

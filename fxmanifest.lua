@@ -17,7 +17,6 @@ server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/logger.lua',
     'server/functions.lua',
-    'server/enums/*.lua',
     'server/classes/*.lua',
     'server/managers/*.lua',
     'server/listeners/*.lua',
