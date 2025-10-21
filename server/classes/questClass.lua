@@ -36,12 +36,12 @@ function Quest:getSteps()
     return self.steps
 end
 
-function Quest:getTree()
-    return self.tree
-end
-
 function Quest:getSkillsReference()
     return self.skillsReference
+end
+
+function Quest:getHidden()
+    return self.hidden
 end
 
 --[[ SETTERS ]]
@@ -62,10 +62,10 @@ function Quest:setSteps(steps)
     self.steps = steps
 end
 
-function Quest:setTree(tree)
-    self.tree = tree
-end
-
 function Quest:setSkillsReference(skillsReference)
     self.skillsReference = skillsReference
+end
+
+function Quest:setHidden(hidden)
+    self.hidden = hidden
 end

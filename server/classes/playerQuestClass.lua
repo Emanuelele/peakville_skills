@@ -35,6 +35,15 @@ function PlayerQuest:nextSteps(stepsNumber)
     self.currentStep += (stepsNumber or 1)
 end
 
+function PlayerQuest:serialize()
+    return {
+        questId = self.quest:getId(),
+        playerId = self.player:getId(),
+        completed = self.completed,
+        currentStep = self.currentStep
+    }
+end
+
 --[[ GETTERS ]]
 
 function PlayerQuest:getQuest()

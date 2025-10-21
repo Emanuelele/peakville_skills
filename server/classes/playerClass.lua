@@ -13,7 +13,7 @@ function Player:new(xPlayer, playerData)
     self.currentTrees = playerData.currentTrees or {} --Riferimento agli id degli alberi sbloccati (array)
 
     self.quests = playerData.quests or {} --Oggetti serializzati di tipo playerQuest (array index)
-    self.skills = playerData.skills or {} --Riferimento agli id delle skill sbloccate (array)
+    self.skills = playerData.skills or {} --Riferimento agli id delle skill sbloccate (array index)
     return self
 end
 

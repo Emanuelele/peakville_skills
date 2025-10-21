@@ -26,10 +26,11 @@ CREATE TABLE skills (
 );
 
 CREATE TABLE quests (
-    id INT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
     XP INT NOT NULL DEFAULT 1,
     steps INT NOT NULL DEFAULT 1,
     skillsReference JSON,
+    hidden BOOLEAN NOT NULL DEFAULT FALSE,
 );
