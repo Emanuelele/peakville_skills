@@ -34,16 +34,16 @@ RegisterStaffActionsInsertListener = function()
             if questInsertedOnDb then
 
                 Quests[quest:getId()] = quest
-
-                TriggerClientEvent("peakville_skills:newQuestCreated", -1, {
-                    id = quest:getId(),
-                    name = quest:getName(),
-                    description = quest:getDescription(),
-                    XP = quest:getXP(),
-                    steps = quest:getSteps(),
-                    tree = quest:getTree(),
-                })
-                
+                if not quest:getHidden() then
+                    TriggerClientEvent("peakville_skills:newQuestCreated", -1, {
+                        id = quest:getId(),
+                        name = quest:getName(),
+                        description = quest:getDescription(),
+                        XP = quest:getXP(),
+                        steps = quest:getSteps(),
+                        hidden = quest:getHidden(),
+                    })
+                end
             end
         end
     end)
