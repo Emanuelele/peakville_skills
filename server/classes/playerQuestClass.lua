@@ -18,6 +18,7 @@ function PlayerQuest:complete()
     if self.player:hasQuestInPool(self.quest) and not self.completed then
         self.completed = true
         self.player:addExperience(self.quest:getXP())
+        self.currentStep = self.quest:getSteps()
         TriggerClientEvent("peakville_skills:questCompleted", self.player:getSource(), self.quest:getId())
     end
 end
@@ -29,11 +30,12 @@ function PlayerQuest:nextSteps(stepsNumber)
         return
     end
 
-    self.currentStep = math.min(self.currentStep + stepsNumber, self.quest:getSteps())
-
     if self.currentStep >= self.quest:getSteps() then
         self:complete()
     end
+
+    self.currentStep = self.currentStep + stepsNumber
+    TriggerClientEvent("peakville_skills:questStepUpdated", self.player:getSource(), self.quest:getId(), self.currentStep)
 end
 
 function PlayerQuest:serialize()

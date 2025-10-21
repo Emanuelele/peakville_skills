@@ -62,16 +62,20 @@ function Player:addTree(tree)
         if tokensPrediction >= 0 then
             self.tokens = tokensPrediction
             self.currentTrees[tree:getId()] = true
-            TriggerClientEvent("peakville_skills:newTreeReached", self.source, tree:getId(), self.tokens)
+            return true
         end
+        return false
     end
+    return false
 end
 
 function Player:removeTree(tree)
     if self.currentTrees[tree:getId()] then
         self.tokens = self.tokens + tree:getRefoundPrice()
         self.currentTrees[tree:getId()] = nil
+        return true
     end
+    return false
 end
 
 function Player:addSkill(skill)
@@ -80,15 +84,22 @@ function Player:addSkill(skill)
         if tokensPrediction >= 0 then
             self.tokens = tokensPrediction
             self.skills[skill:getId()] = true
-            TriggerClientEvent("peakville_skills:newSkillReached", self.source, skill:getId(), self.tokens)
+            RecalculatePlayerQuests(self)
+            return true
         end
+        return false
     end
+    return false
 end
 
 function Player:removeSkill(skill)
     if self.skills[skill:getId()] then
         self.tokens = self.tokens + skill:getRefoundPrice()
+        self.skills[skill:getId()] = nil
+        RecalculatePlayerQuests(self)
+        return true
     end
+    return false
 end
 
 function Player:hasQuestInPool(quest)
