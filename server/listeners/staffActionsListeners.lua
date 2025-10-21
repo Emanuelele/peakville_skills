@@ -42,6 +42,7 @@ RegisterStaffActionsInsertListener = function()
                         XP = quest:getXP(),
                         steps = quest:getSteps(),
                         skillsReference = quest:getSkillsReference(),
+                        requiredQuests = quest:getRequiredQuests(),
                         hidden = quest:getHidden(),
                     })
                 end
@@ -117,6 +118,7 @@ RegisterStaffActionsEditListener = function()
             if data.XP then quest:setXP(data.XP) end
             if data.steps then quest:setSteps(data.steps) end
             if data.skillsReference then quest:setSkillsReference(data.skillsReference) end
+            if data.requiredQuests then quest:setRequiredQuests(data.requiredQuests) end
             if data.hidden ~= nil then quest:setHidden(data.hidden) end
             return quest
         end)
@@ -132,6 +134,7 @@ RegisterStaffActionsEditListener = function()
                         XP = updatedQuest:getXP(),
                         steps = updatedQuest:getSteps(),
                         skillsReference = updatedQuest:getSkillsReference(),
+                        requiredQuests = updatedQuest:getRequiredQuests(),
                         hidden = updatedQuest:getHidden(),
                     })
                 end

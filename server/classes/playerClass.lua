@@ -21,7 +21,7 @@ end
 --[[ METHODS ]]
 
 function Player:addExperience(value)
-    self.XP = self.XP + value
+    self.XP = math.min(self.XP + value, Config.MaxXP)
 
     TriggerClientEvent("peakville_skills:xpAdded", self.source, self.XP)
 

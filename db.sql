@@ -32,5 +32,6 @@ CREATE TABLE quests (
     XP INT NOT NULL DEFAULT 1,
     steps INT NOT NULL DEFAULT 1,
     skillsReference JSON,
+    requiredQuests JSON,
     hidden BOOLEAN NOT NULL DEFAULT FALSE,
 );

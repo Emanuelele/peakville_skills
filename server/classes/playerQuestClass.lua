@@ -4,8 +4,8 @@ PlayerQuest.__index = PlayerQuest
 
 function PlayerQuest:new(quest, player, playerQuestData)
     self = setmetatable({}, PlayerQuest)
-    self.quest = quest --In fase di serializzazione salviamo solo l'id della quest
-    self.player = player --In fase di serializzazione salviamo solo l'identificativo del player
+    self.quest = quest --In fase di serializzazione salviamo solo l'id della quest, quando verrà istanziato il player sarà passato come parametro
+    self.player = player --Non salvato in fase di srializzazione, quando verrà istanziato il player sarà passato come parametro
     self.completed = playerQuestData and playerQuestData.completed or false
     self.currentStep = playerQuestData and playerQuestData.currentStep or 0
     return self
@@ -23,16 +23,17 @@ function PlayerQuest:complete()
 end
 
 function PlayerQuest:nextSteps(stepsNumber)
-    if
-        self.player:hasQuestInPool(self.quest)
-        and not self.completed
-        and self.currentStep + (stepsNumber or 1) >= self.quest:getSteps()
-    then
-        self:complete()
-        self.currentStep = self.quest:getSteps()
+    stepsNumber = stepsNumber or 1
+
+    if not self.player:hasQuestInPool(self.quest) or self.completed then
         return
     end
-    self.currentStep += (stepsNumber or 1)
+
+    self.currentStep = math.min(self.currentStep + stepsNumber, self.quest:getSteps())
+
+    if self.currentStep >= self.quest:getSteps() then
+        self:complete()
+    end
 end
 
 function PlayerQuest:serialize()

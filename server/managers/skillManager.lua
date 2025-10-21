@@ -1,17 +1,60 @@
---todo: inserimento nel db
 InsertSkillOnDb = function(skill)
+    MySQL.insert.await([[
+        INSERT INTO skills (id, name, description, image, basePrice, parentTree, previousSkills, nextSkills)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+    ]], {
+        skill:getId(),
+        skill:getName(),
+        skill:getDescription(),
+        skill:getImage(),
+        skill:getBasePrice(),
+        skill:getParentTree(),
+        json.encode(skill:getPreviousSkills()),
+        json.encode(skill:getNextSkills())
+    })
     return true
 end
 
---to-do
 RetreiveSkillsFromDb = function()
-    return {}
+    local results = MySQL.query.await('SELECT * FROM skills')
+    local skills = {}
+
+    if results then
+        for _, row in ipairs(results) do
+            local skillData = {
+                id = row.id,
+                name = row.name,
+                description = row.description,
+                image = row.image,
+                basePrice = row.basePrice,
+                parentTree = row.parentTree,
+                previousSkills = json.decode(row.previousSkills) or {},
+                nextSkills = json.decode(row.nextSkills) or {}
+            }
+            skills[row.id] = Skill:new(skillData)
+        end
+    end
+
+    return skills
 end
 
---todo
 UpdateSkillOnDb = function(skill)
+    MySQL.update.await([[
+        UPDATE skills 
+        SET name = ?, description = ?, image = ?, basePrice = ?, parentTree = ?, previousSkills = ?, nextSkills = ?
+        WHERE id = ?
+    ]], {
+        skill:getName(),
+        skill:getDescription(),
+        skill:getImage(),
+        skill:getBasePrice(),
+        skill:getParentTree(),
+        json.encode(skill:getPreviousSkills()),
+        json.encode(skill:getNextSkills()),
+        skill:getId()
+    })
 end
 
---to-do
 DeleteSkillFromDb = function(skillId)
+    MySQL.query.await('DELETE FROM skills WHERE id = ?', {skillId})
 end

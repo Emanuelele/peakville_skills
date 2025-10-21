@@ -1,8 +1,8 @@
 Config = {}
 
 Config.Debug = true
---to-do: definire con quanti token starti
 Config.StartTokens = 10
 Config.SaveThresholdIds = 10
-Config.MaxActiveTrees = 2
 Config.SavePlayersTime = 60000
+Config.MaxLevel = 50
+Config.MaxXP = 10000 --Xp massimo dell'ultimo livello
