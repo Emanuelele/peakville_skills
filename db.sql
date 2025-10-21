@@ -11,7 +11,8 @@ CREATE TABLE players (
 CREATE TABLE trees (
     id INT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
-    description TEXT
+    description TEXT,
+    price INT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE skills (
@@ -19,7 +20,7 @@ CREATE TABLE skills (
     name VARCHAR(100) NOT NULL,
     description TEXT,
     image VARCHAR(255),
-    basePrice INT NOT NULL DEFAULT 1,
+    price INT NOT NULL DEFAULT 1,
     parentTree INT NOT NULL,
     previousSkills JSON,
     nextSkills JSON,

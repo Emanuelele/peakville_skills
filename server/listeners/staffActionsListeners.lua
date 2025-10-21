@@ -15,7 +15,7 @@ RegisterStaffActionsInsertListener = function()
                     name = skill:getName(),
                     description = skill:getDescription(),
                     image = skill:getImage(),
-                    basePrice = skill:getBasePrice(),
+                    price = skill:getPrice(),
                     parentTree = skill:getParentTree(),
                     previousSkills = skill:getPreviousSkills(),
                     nextSkills = skill:getNextSkills()
@@ -65,6 +65,7 @@ RegisterStaffActionsInsertListener = function()
                     id = tree:getId(),
                     name = tree:getName(),
                     description = tree:getDescription(),
+                    price = tree:getPrice()
                 })
             end
         end
@@ -82,7 +83,7 @@ RegisterStaffActionsEditListener = function()
             if data.name then skill:setName(data.name) end
             if data.description then skill:setDescription(data.description) end
             if data.image then skill:setImage(data.image) end
-            if data.basePrice then skill:setBasePrice(data.basePrice) end
+            if data.price then skill:setPrice(data.price) end
             if data.parentTree then skill:setParentTree(data.parentTree) end
             if data.previousSkills then skill:setPreviousSkills(data.previousSkills) end
             if data.nextSkills then skill:setNextSkills(data.nextSkills) end
@@ -97,7 +98,7 @@ RegisterStaffActionsEditListener = function()
                     name = updatedSkill:getName(),
                     description = updatedSkill:getDescription(),
                     image = updatedSkill:getImage(),
-                    basePrice = updatedSkill:getBasePrice(),
+                    price = updatedSkill:getPrice(),
                     parentTree = updatedSkill:getParentTree(),
                     previousSkills = updatedSkill:getPreviousSkills(),
                     nextSkills = updatedSkill:getNextSkills()
@@ -151,6 +152,7 @@ RegisterStaffActionsEditListener = function()
         local treeObjUpdated, updatedTree = pcall(function()
             if data.name then tree:setName(data.name) end
             if data.description then tree:setDescription(data.description) end
+            if data.price then tree:setPrice(data.price) end
             return tree
         end)
 
@@ -161,6 +163,7 @@ RegisterStaffActionsEditListener = function()
                     id = updatedTree:getId(),
                     name = updatedTree:getName(),
                     description = updatedTree:getDescription(),
+                    price = updatedTree:getPrice()
                 })
             end
         end

@@ -10,10 +10,10 @@ function Player:new(xPlayer, playerData)
     self.XP = playerData.XP or 0
     self.tokens = playerData.tokens or Config.StartTokens
 
-    self.currentTrees = playerData.currentTrees or {} --Riferimento agli id degli alberi sbloccati (array)
+    self.currentTrees = playerData.currentTrees or {}
 
-    self.quests = playerData.quests or {} --Oggetti serializzati di tipo playerQuest (array index)
-    self.skills = playerData.skills or {} --Riferimento agli id delle skill sbloccate (array index)
+    self.quests = playerData.quests or {}
+    self.skills = playerData.skills or {}
     return self
 end
 
@@ -56,9 +56,27 @@ function Player:saveAndDestroy()
     return nil
 end
 
+function Player:addTree(tree)
+    if not self.currentTrees[tree:getId()] then
+        local tokensPrediction = self.tokens - tree:getPrice()
+        if tokensPrediction >= 0 then
+            self.tokens = tokensPrediction
+            self.currentTrees[tree:getId()] = true
+            TriggerClientEvent("peakville_skills:newTreeReached", self.source, tree:getId(), self.tokens)
+        end
+    end
+end
+
+function Player:removeTree(tree)
+    if self.currentTrees[tree:getId()] then
+        self.tokens = self.tokens + tree:getRefoundPrice()
+        self.currentTrees[tree:getId()] = nil
+    end
+end
+
 function Player:addSkill(skill)
-    if not self.skills[skill:getId()] and CanPlayerGetSkill(self, skill) then
-        local tokensPrediction = self.tokens - GetTokensPriceForSkill(self, skill)
+    if not self.skills[skill:getId()] and skill:isUnlockable(self) then
+        local tokensPrediction = self.tokens - skill:getPrice()
         if tokensPrediction >= 0 then
             self.tokens = tokensPrediction
             self.skills[skill:getId()] = true
@@ -69,7 +87,7 @@ end
 
 function Player:removeSkill(skill)
     if self.skills[skill:getId()] then
-        self.tokens += math.floor(GetTokensPriceForSkill(self, skill))
+        self.tokens = self.tokens + skill:getRefoundPrice()
     end
 end
 

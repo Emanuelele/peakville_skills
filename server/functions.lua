@@ -1,6 +1,3 @@
-EmptyFunction = function()
-end
-
 local idCounter = GetResourceKvpInt("skills_id_gen") or 0
 GenerateNewId = function()
     idCounter = idCounter + 1

@@ -1,13 +1,13 @@
 InsertSkillOnDb = function(skill)
     MySQL.insert.await([[
-        INSERT INTO skills (id, name, description, image, basePrice, parentTree, previousSkills, nextSkills)
+        INSERT INTO skills (id, name, description, image, price, parentTree, previousSkills, nextSkills)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     ]], {
         skill:getId(),
         skill:getName(),
         skill:getDescription(),
         skill:getImage(),
-        skill:getBasePrice(),
+        skill:getPrice(),
         skill:getParentTree(),
         json.encode(skill:getPreviousSkills()),
         json.encode(skill:getNextSkills())
@@ -26,7 +26,7 @@ RetreiveSkillsFromDb = function()
                 name = row.name,
                 description = row.description,
                 image = row.image,
-                basePrice = row.basePrice,
+                price = row.price,
                 parentTree = row.parentTree,
                 previousSkills = json.decode(row.previousSkills) or {},
                 nextSkills = json.decode(row.nextSkills) or {}
@@ -41,13 +41,13 @@ end
 UpdateSkillOnDb = function(skill)
     MySQL.update.await([[
         UPDATE skills 
-        SET name = ?, description = ?, image = ?, basePrice = ?, parentTree = ?, previousSkills = ?, nextSkills = ?
+        SET name = ?, description = ?, image = ?, price = ?, parentTree = ?, previousSkills = ?, nextSkills = ?
         WHERE id = ?
     ]], {
         skill:getName(),
         skill:getDescription(),
         skill:getImage(),
-        skill:getBasePrice(),
+        skill:getPrice(),
         skill:getParentTree(),
         json.encode(skill:getPreviousSkills()),
         json.encode(skill:getNextSkills()),

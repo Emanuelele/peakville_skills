@@ -7,7 +7,7 @@ function Skill:new(skillData)
     self.name = skillData.name or ""
     self.description = skillData.description or ""
     self.image = skillData.image or ""
-    self.basePrice = skillData.basePrice or 1
+    self.price = skillData.price or 1
 
     self.parentTree = skillData.parentTree --Riferimento all'id dell'albero genitore
     self.previousSkills = skillData.previousSkills or {} --Riferimento agli id delle skill precedenti (array)
@@ -21,6 +21,19 @@ end
 function Skill:destroy()
     self = nil
     return nil
+end
+
+function Skill:getRefoundPrice()
+    return math.floor(self.price / 2)
+end
+
+function Skill:isUnlockable(player)
+    for _, prevSkillId in ipairs(self.previousSkills) do
+        if not player.skills[prevSkillId] then
+            return false
+        end
+    end
+    return true
 end
 
 
@@ -42,8 +55,8 @@ function Skill:getImage()
     return self.image
 end
 
-function Skill:getBasePrice()
-    return self.basePrice
+function Skill:getPrice()
+    return self.price
 end
 
 function Skill:getParentTree()
@@ -73,8 +86,8 @@ function Skill:setImage(image)
     self.image = image
 end
 
-function Skill:setBasePrice(basePrice)
-    self.basePrice = basePrice
+function Skill:setPrice(price)
+    self.price = price
 end
 
 function Skill:setParentTree(parentTree)
