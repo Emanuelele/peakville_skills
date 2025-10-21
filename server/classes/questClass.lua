@@ -9,6 +9,7 @@ function Quest:new(questData)
     self.XP = questData.XP or 1
     self.steps = questData.steps or 1
     self.skillsReference = questData.skillsReference or {} --Riferimento agli id delle skill a cui la quest fa riferimento (puoi completare la quest se possiedi queste skill) (array)
+    self.hidden = questData.hidden or false
     return self
 end
 
