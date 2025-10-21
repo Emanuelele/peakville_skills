@@ -29,13 +29,13 @@ end
 
 function Skill:isUnlockable(player)
     for _, prevSkillId in ipairs(self.previousSkills) do
-        if not player.skills[prevSkillId] then
+        if not player:getSkills()[prevSkillId] then
             return false
         end
     end
 
     for _, treeId in ipairs(self.parentTree) do
-        if not player.trees[treeId] then
+        if not player:getCurrentTrees()[treeId] then
             return false
         end
     end

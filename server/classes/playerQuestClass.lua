@@ -30,8 +30,9 @@ function PlayerQuest:nextSteps(stepsNumber)
         return
     end
 
-    if self.currentStep >= self.quest:getSteps() then
+    if self.currentStep + stepsNumber >= self.quest:getSteps() then
         self:complete()
+        return
     end
 
     self.currentStep = self.currentStep + stepsNumber

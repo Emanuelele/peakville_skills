@@ -68,5 +68,5 @@ RecalculatePlayerQuests = function(player)
         end
     end
 
-    player.quests = newQuests
+    player:setQuests(newQuests)
 end

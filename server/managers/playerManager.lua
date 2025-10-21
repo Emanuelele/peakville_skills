@@ -2,7 +2,7 @@ GetPlayerData = function(identifier)
     local result = MySQL.single.await('SELECT * FROM players WHERE identifier = ?', {identifier})
 
     if not result then
-        return n
+        return nil
     end
 
     local playerData = {

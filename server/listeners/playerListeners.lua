@@ -3,14 +3,13 @@ RegisterPlayerListener = function()
         local src = source
 
         local xPlayer = ESX.GetPlayerFromId(src)
-        if not xPlayer then
+        if not xPlayer or Players[src] then
             DropPlayer(src, "Errore inizializzazione skills")
         end
 
         local playerData = GetPlayerData(xPlayer.identifier)
         local player = Player:new(xPlayer, playerData)
 
-        player:setQuests(RecalculatePlayerQuests(player))
         player:save()
 
         Players[src] = player

@@ -5,7 +5,7 @@ CREATE TABLE players (
     tokens INT NOT NULL DEFAULT 0,
     currentTrees JSON,
     quests JSON,
-    skills JSON,
+    skills JSON
 );
 
 CREATE TABLE trees (
@@ -23,16 +23,16 @@ CREATE TABLE skills (
     price INT NOT NULL DEFAULT 1,
     parentTree INT NOT NULL,
     previousSkills JSON,
-    nextSkills JSON,
+    nextSkills JSON
 );
 
 CREATE TABLE quests (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
     XP INT NOT NULL DEFAULT 1,
     steps INT NOT NULL DEFAULT 1,
     skillsReference JSON,
     requiredQuests JSON,
-    hidden BOOLEAN NOT NULL DEFAULT FALSE,
+    hidden BOOLEAN NOT NULL DEFAULT FALSE
 );
