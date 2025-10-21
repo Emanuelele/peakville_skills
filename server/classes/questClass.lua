@@ -9,7 +9,7 @@ function Quest:new(questData)
     self.XP = questData.XP or 1
     self.type = questData.type or QUEST_TYPES["GENERAL"]
     self.steps = questData.steps or 1
-    self.skills = questData.skills or {}
+    self.skillsReference = questData.skillsReference or {}
     return self
 end
 
