@@ -33,6 +33,13 @@ function Skill:isUnlockable(player)
             return false
         end
     end
+
+    for _, treeId in ipairs(self.parentTree) do
+        if not player.trees[treeId] then
+            return false
+        end
+    end
+
     return true
 end
 

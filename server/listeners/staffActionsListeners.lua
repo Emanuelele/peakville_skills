@@ -2,14 +2,17 @@ RegisterStaffActionsInsertListener = function()
     lib.callback.register("peakville_skills:createNewSkill", function(source, data)
         if not SourceIsStaffer(source) then return end
 
+        local valid, error = Validator.validate(data, ValidatorSchemas.SkillCreate)
+        if not valid then
+            Logger.Error("Invalid skill data: " .. error)
+            return false
+        end
+
         local skillObjCreated, skill = pcall(function() return Skill:new(data) end)
         if skillObjCreated and skill then
-
             local skillInsertedOnDb, _ = pcall(function() InsertSkillOnDb(skill) end)
             if skillInsertedOnDb then
-
                 Skills[skill:getId()] = skill
-
                 TriggerClientEvent("peakville_skills:newSkillCreated", -1, {
                     id = skill:getId(),
                     name = skill:getName(),
@@ -20,25 +23,29 @@ RegisterStaffActionsInsertListener = function()
                     previousSkills = skill:getPreviousSkills(),
                     nextSkills = skill:getNextSkills()
                 })
+                return true
             end
         end
+        return false
     end)
 
     lib.callback.register("peakville_skills:createNewQuest", function(source, data)
         if not SourceIsStaffer(source) then return end
 
+        local valid, error = Validator.validate(data, ValidatorSchemas.QuestCreate)
+        if not valid then
+            Logger.Error("Invalid quest data: " .. error)
+            return false
+        end
+
         local questObjCreated, quest = pcall(function() return Quest:new(data) end)
         if questObjCreated and quest then
-
             local questInsertedOnDb, _ = pcall(function() InsertQuestOnDb(quest) end)
             if questInsertedOnDb then
-
                 Quests[quest:getId()] = quest
-
                 for _, player in pairs(Players) do
                     RecalculatePlayerQuests(player)
                 end
-
                 if not quest:getHidden() then
                     TriggerClientEvent("peakville_skills:newQuestCreated", -1, {
                         id = quest:getId(),
@@ -51,29 +58,36 @@ RegisterStaffActionsInsertListener = function()
                         hidden = quest:getHidden(),
                     })
                 end
+                return true
             end
         end
+        return false
     end)
 
     lib.callback.register("peakville_skills:createNewTree", function(source, data)
         if not SourceIsStaffer(source) then return end
 
+        local valid, error = Validator.validate(data, ValidatorSchemas.TreeCreate)
+        if not valid then
+            Logger.Error("Invalid tree data: " .. error)
+            return false
+        end
+
         local treeObjCreated, tree = pcall(function() return Tree:new(data) end)
         if treeObjCreated and tree then
-
             local treeInsertedOnDb, _ = pcall(function() InsertTreeOnDb(tree) end)
             if treeInsertedOnDb then
-
                 Trees[tree:getId()] = tree
-
                 TriggerClientEvent("peakville_skills:newTreeCreated", -1, {
                     id = tree:getId(),
                     name = tree:getName(),
                     description = tree:getDescription(),
                     price = tree:getPrice()
                 })
+                return true
             end
         end
+        return false
     end)
 end
 
@@ -81,8 +95,14 @@ RegisterStaffActionsEditListener = function()
     lib.callback.register("peakville_skills:updateSkill", function(source, skillId, data)
         if not SourceIsStaffer(source) then return end
 
+        local valid, error = Validator.validate(data, ValidatorSchemas.Skill)
+        if not valid then
+            Logger.Error("Invalid skill data: " .. error)
+            return false
+        end
+
         local skill = Skills[skillId]
-        if not skill then return end
+        if not skill then return false end
 
         local skillObjUpdated, updatedSkill = pcall(function()
             if data.name then skill:setName(data.name) end
@@ -108,15 +128,23 @@ RegisterStaffActionsEditListener = function()
                     previousSkills = updatedSkill:getPreviousSkills(),
                     nextSkills = updatedSkill:getNextSkills()
                 })
+                return true
             end
         end
+        return false
     end)
 
     lib.callback.register("peakville_skills:updateQuest", function(source, questId, data)
         if not SourceIsStaffer(source) then return end
 
+        local valid, error = Validator.validate(data, ValidatorSchemas.Quest)
+        if not valid then
+            Logger.Error("Invalid quest data: " .. error)
+            return false
+        end
+
         local quest = Quests[questId]
-        if not quest then return end
+        if not quest then return false end
 
         local questObjUpdated, updatedQuest = pcall(function()
             if data.name then quest:setName(data.name) end
@@ -135,7 +163,6 @@ RegisterStaffActionsEditListener = function()
                 for _, player in pairs(Players) do
                     RecalculatePlayerQuests(player)
                 end
-                
                 if not updatedQuest:getHidden() then
                     TriggerClientEvent("peakville_skills:questUpdated", -1, {
                         id = updatedQuest:getId(),
@@ -148,15 +175,23 @@ RegisterStaffActionsEditListener = function()
                         hidden = updatedQuest:getHidden(),
                     })
                 end
+                return true
             end
         end
+        return false
     end)
 
     lib.callback.register("peakville_skills:updateTree", function(source, treeId, data)
         if not SourceIsStaffer(source) then return end
 
+        local valid, error = Validator.validate(data, ValidatorSchemas.Tree)
+        if not valid then
+            Logger.Error("Invalid tree data: " .. error)
+            return false
+        end
+
         local tree = Trees[treeId]
-        if not tree then return end
+        if not tree then return false end
 
         local treeObjUpdated, updatedTree = pcall(function()
             if data.name then tree:setName(data.name) end
@@ -174,30 +209,46 @@ RegisterStaffActionsEditListener = function()
                     description = updatedTree:getDescription(),
                     price = updatedTree:getPrice()
                 })
+                return true
             end
         end
+        return false
     end)
 end
 
 RegisterStaffActionsDeleteListener = function()
     lib.callback.register("peakville_skills:deleteSkill", function(source, skillId)
-        if not SourceIsStaffer(source) then return end
+        if not SourceIsStaffer(source) then return false end
+
+        local valid, error = Validator.validate({id = skillId}, ValidatorSchemas.Id)
+        if not valid then
+            Logger.Error("Invalid skill id: " .. error)
+            return false
+        end
 
         local skill = Skills[skillId]
-        if not skill then return end
+        if not skill then return false end
 
         local skillDeletedFromDb, _ = pcall(function() DeleteSkillFromDb(skillId) end)
         if skillDeletedFromDb then
             Skills[skillId] = nil
             TriggerClientEvent("peakville_skills:skillDeleted", -1, skillId)
+            return true
         end
+        return false
     end)
 
     lib.callback.register("peakville_skills:deleteQuest", function(source, questId)
-        if not SourceIsStaffer(source) then return end
+        if not SourceIsStaffer(source) then return false end
+
+        local valid, error = Validator.validate({id = questId}, ValidatorSchemas.Id)
+        if not valid then
+            Logger.Error("Invalid quest id: " .. error)
+            return false
+        end
 
         local quest = Quests[questId]
-        if not quest then return end
+        if not quest then return false end
 
         local questDeletedFromDb, _ = pcall(function() DeleteQuestFromDb(questId) end)
         if questDeletedFromDb then
@@ -210,19 +261,29 @@ RegisterStaffActionsDeleteListener = function()
             end
             
             TriggerClientEvent("peakville_skills:questDeleted", -1, questId)
+            return true
         end
+        return false
     end)
 
     lib.callback.register("peakville_skills:deleteTree", function(source, treeId)
-        if not SourceIsStaffer(source) then return end
+        if not SourceIsStaffer(source) then return false end
+
+        local valid, error = Validator.validate({id = treeId}, ValidatorSchemas.Id)
+        if not valid then
+            Logger.Error("Invalid tree id: " .. error)
+            return false
+        end
 
         local tree = Trees[treeId]
-        if not tree then return end
+        if not tree then return false end
 
         local treeDeletedFromDb, _ = pcall(function() DeleteTreeFromDb(treeId) end)
         if treeDeletedFromDb then
             Trees[treeId] = nil
             TriggerClientEvent("peakville_skills:treeDeleted", -1, treeId)
+            return true
         end
+        return false
     end)
 end

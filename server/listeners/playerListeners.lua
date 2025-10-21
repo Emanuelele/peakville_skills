@@ -7,11 +7,11 @@ RegisterPlayerListener = function()
             DropPlayer(src, "Errore inizializzazione skills")
         end
 
-        local playerData, toInit = GetPlayerData(xPlayer.identifier)
-        if toInit then
-            TriggerClientEvent("peakville_skills:firstInit", src)
-        end
+        local playerData = GetPlayerData(xPlayer.identifier)
         local player = Player:new(xPlayer, playerData)
+
+        player:setQuests(RecalculatePlayerQuests(player))
+        player:save()
 
         Players[src] = player
 
@@ -25,23 +25,5 @@ RegisterPlayerListener = function()
         end
 
         Players[src] = player:saveAndDestroy()
-    end)
-
-    RegisterNetEvent("peakville_skills:firstInitCompleted", function(trees)
-        local src = source
-
-        local xPlayer = ESX.GetPlayerFromId(src)
-        if not xPlayer then
-            DropPlayer(src, "Errore inizializzazione skills")
-        end
-
-        InitPlayerData(xPlayer, trees)
-
-        local playerData, _ = GetPlayerData(xPlayer.identifier)
-        local player = Player:new(xPlayer, playerData)
-
-        Players[src] = player
-
-        TriggerClientEvent("peakville_skills:init", src, player:serialize())
     end)
 end

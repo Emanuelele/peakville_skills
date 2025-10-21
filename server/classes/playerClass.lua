@@ -139,3 +139,29 @@ end
 function Player:getSkills()
     return self.skills
 end
+
+--[[ SETTERS ]]
+
+function Player:setLevel(value)
+    self.level = value
+end
+
+function Player:setXP(value)
+    self.XP = value
+end
+
+function Player:setTokens(value)
+    self.tokens = value
+end
+
+function Player:setCurrentTrees(value)
+    self.currentTrees = value
+end
+
+function Player:setQuests(value)
+    self.quests = value
+end
+
+function Player:setSkills(value)
+    self.skills = value
+end

@@ -1,9 +1,8 @@
---n.b: restituisce anche se il player va inizializzato (nessun player data presente)
 GetPlayerData = function(identifier)
     local result = MySQL.single.await('SELECT * FROM players WHERE identifier = ?', {identifier})
 
     if not result then
-        return nil, true
+        return n
     end
 
     local playerData = {
@@ -15,7 +14,7 @@ GetPlayerData = function(identifier)
         skills = json.decode(result.skills) or {}
     }
 
-    return playerData, false
+    return playerData
 end
 
 SavePlayerData = function(player)
@@ -40,9 +39,4 @@ SaveAllPlayers = function()
     for _, player in pairs(Players) do
         player:save()
     end
-end
-
---to-do: inizializza tutti i dati del player (quest ecc) in base agli alberi scelti
---inserisce nel db le quest giornaliere, tematiche e generali per il player
-InitPlayerData = function(xPlayer, trees)
 end
