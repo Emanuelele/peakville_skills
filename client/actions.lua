@@ -5,17 +5,13 @@ exports("PerformAction", function(actionKey, actionParams, count)
 
     local valid, error = ActionsRegistry.ValidateActionParams(actionKey, actionParams or {})
     if not valid then
-        if Config.Debug then
-            print("^1[Skills] Invalid action params: " .. error)
-        end
+        Logger.Error("Invalid action params: " .. error)
         return false
     end
 
     local action = ActionsRegistry.Actions[actionKey]
     if not action then
-        if Config.Debug then
-            print("^1[Skills] Unknown action: " .. actionKey)
-        end
+        Logger.Error("Unknown action: " .. actionKey)
         return false
     end
 
