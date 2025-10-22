@@ -136,7 +136,7 @@ function Player:canUnlockQuest(quest)
     return self:checkQuestRequirements(quest)
 end
 
-function Player:recalculatePlayerQuests()
+function Player:recalculatePlayerQuests(firstLoad)
     local newQuests = {}
 
     for questId, quest in pairs(Quests) do
@@ -154,7 +154,10 @@ function Player:recalculatePlayerQuests()
     end
 
     self.quests = newQuests
-    TriggerClientEvent("peakville_skills:questsRecalculated", self.source, SerializePlayerQuests(self.quests))
+
+    if not firstLoad then
+        TriggerClientEvent("peakville_skills:questsRecalculated", self.source, SerializePlayerQuests(self.quests))
+    end
 end
 
 function Player:selectQuest(questId)

@@ -1,3 +1,8 @@
+export interface NuiMessageData<T = unknown> {
+    action: string;
+    data?: T;
+}
+
 export interface PlayerData {
   level: number;
   XP: number;
