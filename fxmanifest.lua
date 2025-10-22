@@ -10,7 +10,8 @@ shared_scripts {
     '@es_extended/imports.lua',
     '@ox_lib/init.lua',
     'shared/config.lua',
-    'shared/functions.lua'
+    'shared/functions.lua',
+    'shared/actions/*.lua',
 }
 
 server_scripts {
@@ -25,7 +26,10 @@ server_scripts {
 }
 
 client_scripts {
-    'client/main.lua'
+    'client/functions.lua',
+    'client/main.lua',
+    'client/ui.lua',
+    'client/actions.lua'
 }
 
 ui_page 'web/build/index.html'

@@ -29,6 +29,7 @@ RetreiveQuestsFromDb = function()
                 steps = row.steps,
                 skillsReference = json.decode(row.skillsReference) or {},
                 requiredQuests = json.decode(row.requiredQuests) or {},
+                actionConfig = json.decode(row.actionConfig) or {},
                 hidden = row.hidden
             }
             quests[row.id] = Quest:new(questData)
@@ -41,7 +42,7 @@ end
 UpdateQuestOnDb = function(quest)
     MySQL.update.await([[
         UPDATE quests 
-        SET name = ?, description = ?, XP = ?, steps = ?, skillsReference = ?, requiredQuests = ?, hidden = ?
+        SET name = ?, description = ?, XP = ?, steps = ?, skillsReference = ?, requiredQuests = ?, actionConfig = ?, hidden = ?
         WHERE id = ?
     ]], {
         quest:getName(),
@@ -50,6 +51,7 @@ UpdateQuestOnDb = function(quest)
         quest:getSteps(),
         json.encode(quest:getSkillsReference()),
         json.encode(quest:getRequiredQuests()),
+        json.encode(quest:getActionConfig()),
         quest:getHidden(),
         quest:getId()
     })

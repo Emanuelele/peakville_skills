@@ -10,6 +10,7 @@ function Quest:new(questData)
     self.steps = questData?.steps or 1
     self.skillsReference = questData?.skillsReference or {} --Riferimento agli id delle skill a cui la quest fa riferimento (puoi completare la quest se possiedi queste skill) (array)
     self.requiredQuests = questData?.requiredQuests or {} --Riferimento agli id delle quest richieste per sbloccare questa quest (array)
+    self.actionConfig = questData?.actionConfig or {}
     self.hidden = questData?.hidden or false
     return self
 end
@@ -26,10 +27,10 @@ function Quest:serialize()
         steps = self.steps,
         skillsReference = self.skillsReference,
         requiredQuests = self.requiredQuests,
+        actionConfig = self.actionConfig,
         hidden = self.hidden
     }
 end
-
 
 
 --[[ GETTERS ]]
@@ -62,6 +63,10 @@ function Quest:getRequiredQuests()
     return self.requiredQuests
 end
 
+function Quest:getActionConfig()
+    return self.actionConfig
+end
+
 function Quest:getHidden()
     return self.hidden
 end
@@ -90,6 +95,10 @@ end
 
 function Quest:setRequiredQuests(requiredQuests)
     self.requiredQuests = requiredQuests
+end
+
+function Quest:setActionConfig(actionConfig)
+    self.actionConfig = actionConfig
 end
 
 function Quest:setHidden(hidden)

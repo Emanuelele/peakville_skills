@@ -141,6 +141,7 @@ RegisterStaffActionsEditListener = function()
             if data.steps then quest:setSteps(data.steps) end
             if data.skillsReference then quest:setSkillsReference(data.skillsReference) end
             if data.requiredQuests then quest:setRequiredQuests(data.requiredQuests) end
+            if data.actionConfig then quest:setActionConfig(data.actionConfig) end
             if data.hidden ~= nil then quest:setHidden(data.hidden) end
             return quest
         end)

@@ -39,6 +39,7 @@ ValidatorSchemas.Quest = {
     steps = { type = "number", min = 1, optional = true },
     skillsReference = { type = "array", items = "number", optional = true },
     requiredQuests = { type = "array", items = "number", optional = true },
+    actionConfig = { type = "table", optional = true },
     hidden = { type = "boolean", optional = true }
 }
 
@@ -49,6 +50,7 @@ ValidatorSchemas.QuestCreate = {
     steps = { type = "number", min = 1, optional = true },
     skillsReference = { type = "array", items = "number", optional = true },
     requiredQuests = { type = "array", items = "number", optional = true },
+    actionConfig = { type = "table", optional = true },
     hidden = { type = "boolean", optional = true }
 }
 
