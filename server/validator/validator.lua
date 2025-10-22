@@ -24,9 +24,11 @@ Validator.validate = function(data, schema)
 
                 if rules.items then
                     for i, item in ipairs(value) do
-                        if type(item) ~= rules.items then
+                        local coerced, coercedItem = TypeCoercion.CoerceValue(item, rules.items)
+                        if not coerced then
                             return false, string.format("Field '%s[%d]' must be of type '%s'", field, i, rules.items)
                         end
+                        value[i] = coercedItem
                     end
                 end
             elseif fieldType == "table" then
@@ -41,24 +43,27 @@ Validator.validate = function(data, schema)
                     end
                 end
             else
-                if valueType ~= fieldType then
+                local coerced, coercedValue = TypeCoercion.CoerceValue(value, fieldType)
+                if not coerced then
                     return false, string.format("Field '%s' must be of type '%s', got '%s'", field, fieldType, valueType)
                 end
+                value = coercedValue
+                data[field] = coercedValue
             end
 
-            if rules.min and valueType == "number" and value < rules.min then
+            if rules.min and type(value) == "number" and value < rules.min then
                 return false, string.format("Field '%s' must be >= %s", field, rules.min)
             end
 
-            if rules.max and valueType == "number" and value > rules.max then
+            if rules.max and type(value) == "number" and value > rules.max then
                 return false, string.format("Field '%s' must be <= %s", field, rules.max)
             end
 
-            if rules.minLength and valueType == "string" and #value < rules.minLength then
+            if rules.minLength and type(value) == "string" and #value < rules.minLength then
                 return false, string.format("Field '%s' must have at least %d characters", field, rules.minLength)
             end
 
-            if rules.maxLength and valueType == "string" and #value > rules.maxLength then
+            if rules.maxLength and type(value) == "string" and #value > rules.maxLength then
                 return false, string.format("Field '%s' must have at most %d characters", field, rules.maxLength)
             end
         end
