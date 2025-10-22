@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { InitData } from '../types';
+import type { InitData } from '../../types';
 
 interface StaffSectionProps {
     data: InitData;

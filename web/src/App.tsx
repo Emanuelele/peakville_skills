@@ -2,9 +2,9 @@ import { useState } from "react";
 import { useNuiEvent } from "./hooks/useNuiEvent";
 import { useSwipe } from "./hooks/useSwipe";
 import { fetchNui } from "./utils/fetchNui";
-import { SkillsSection } from "./components/SkillsSection";
-import { QuestsSection } from "./components/QuestsSection";
-import { StaffSection } from "./components/StaffSection";
+import { SkillsSection } from "./components/pages/SkillsSection";
+import { QuestsSection } from "./components/pages/QuestsSection";
+import { StaffSection } from "./components/pages/StaffSection";
 import type { InitData } from "./types";
 
 type Section = 'skills' | 'quests' | 'staff';

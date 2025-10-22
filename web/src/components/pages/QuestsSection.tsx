@@ -1,5 +1,5 @@
-import type { InitData, PlayerQuest } from '../types';
-import { fetchNui } from '../utils/fetchNui';
+import type { InitData, PlayerQuest } from '../../types';
+import { fetchNui } from '../../utils/fetchNui';
 
 interface QuestsSectionProps {
     data: InitData;

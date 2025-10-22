@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import type { InitData, Tree, Skill } from '../types';
-import { fetchNui } from '../utils/fetchNui';
+import type { InitData, Tree, Skill } from '../../types';
+import { fetchNui } from '../../utils/fetchNui';
 
 interface SkillsSectionProps {
     data: InitData;
