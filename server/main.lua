@@ -6,7 +6,7 @@ Quests = {}
 Logger.Init()
 
 InitScript()
-RegisterPlayerListener()
+RegisterPlayerLoaderListener()
 RegisterPlayerActionsListener()
 
 RegisterStaffActionsInsertListener()

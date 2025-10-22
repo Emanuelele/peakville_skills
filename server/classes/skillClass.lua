@@ -50,6 +50,19 @@ function Skill:isLeafForPlayer(player)
     return true
 end
 
+function Skill:serialize()
+    return {
+        id = self.id,
+        name = self.name,
+        description = self.description,
+        image = self.image,
+        price = self.price,
+        parentTree = self.parentTree,
+        previousSkills = self.previousSkills,
+        nextSkills = self.nextSkills
+    }
+end
+
 
 --[[ GETTERS ]]
 

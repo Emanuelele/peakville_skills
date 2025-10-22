@@ -19,7 +19,14 @@ RegisterPlayerListener = function()
 
         Players[src] = player
 
-        TriggerClientEvent("peakville_skills:init", src, player:serialize())
+        local initData = {
+            player = player:serialize(),
+            trees = SerializeTrees(),
+            skills = SerializeSkills(),
+            quests = SerializePlayerQuests(player:getQuests())
+        }
+
+        TriggerClientEvent("peakville_skills:init", src, initData)
     end)
 
     RegisterNetEvent('esx:onPlayerLogout', function(src)

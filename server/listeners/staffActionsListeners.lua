@@ -46,18 +46,6 @@ RegisterStaffActionsInsertListener = function()
                 for _, player in pairs(Players) do
                     player:recalculatePlayerQuests()
                 end
-                if not quest:getHidden() then
-                    TriggerClientEvent("peakville_skills:newQuestCreated", -1, {
-                        id = quest:getId(),
-                        name = quest:getName(),
-                        description = quest:getDescription(),
-                        XP = quest:getXP(),
-                        steps = quest:getSteps(),
-                        skillsReference = quest:getSkillsReference(),
-                        requiredQuests = quest:getRequiredQuests(),
-                        hidden = quest:getHidden(),
-                    })
-                end
                 return true
             end
         end
@@ -163,18 +151,6 @@ RegisterStaffActionsEditListener = function()
                 for _, player in pairs(Players) do
                     player:recalculatePlayerQuests()
                 end
-                if not updatedQuest:getHidden() then
-                    TriggerClientEvent("peakville_skills:questUpdated", -1, {
-                        id = updatedQuest:getId(),
-                        name = updatedQuest:getName(),
-                        description = updatedQuest:getDescription(),
-                        XP = updatedQuest:getXP(),
-                        steps = updatedQuest:getSteps(),
-                        skillsReference = updatedQuest:getSkillsReference(),
-                        requiredQuests = updatedQuest:getRequiredQuests(),
-                        hidden = updatedQuest:getHidden(),
-                    })
-                end
                 return true
             end
         end
@@ -262,7 +238,6 @@ RegisterStaffActionsDeleteListener = function()
                 end
             end
 
-            TriggerClientEvent("peakville_skills:questDeleted", -1, questId)
             return true
         end
         return false

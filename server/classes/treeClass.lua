@@ -31,6 +31,15 @@ function Tree:isLeafForPlayer(player)
     return true
 end
 
+function Tree:serialize()
+    return {
+        id = self.id,
+        name = self.name,
+        description = self.description,
+        price = self.price
+    }
+end
+
 --[[ GETTERS ]]
 
 function Tree:getId()

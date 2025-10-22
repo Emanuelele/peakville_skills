@@ -154,6 +154,7 @@ function Player:recalculatePlayerQuests()
     end
 
     self.quests = newQuests
+    TriggerClientEvent("peakville_skills:questsRecalculated", self.source, SerializePlayerQuests(self.quests))
 end
 
 function Player:selectQuest(questId)

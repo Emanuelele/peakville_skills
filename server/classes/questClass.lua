@@ -15,6 +15,23 @@ function Quest:new(questData)
 end
 
 
+--[[ METHODS ]]
+
+function Quest:serialize()
+    return {
+        id = self.id,
+        name = self.name,
+        description = self.description,
+        XP = self.XP,
+        steps = self.steps,
+        skillsReference = self.skillsReference,
+        requiredQuests = self.requiredQuests,
+        hidden = self.hidden
+    }
+end
+
+
+
 --[[ GETTERS ]]
 
 function Quest:getId()
