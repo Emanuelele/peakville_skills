@@ -28,9 +28,6 @@ exports("PerformAction", function(actionKey, actionParams, count)
     return true
 end)
 
-
-WaitPlayerLoaded()
-
 function ActionBatcher:Add(actionKey, params, count)
     local batchKey = actionKey .. ":" .. json.encode(params)
 
@@ -70,7 +67,7 @@ end
 
 AddEventHandler("onResourceStop", function(resourceName)
     if resourceName == GetCurrentResourceName() then
-        if ActionBatcher.batches then
+        if ActionBatcher?.batches then
             for _, batch in pairs(ActionBatcher.batches) do
                 if batch.count > 0 then
                     TriggerServerEvent("peakville_skills:processAction", batch.action, batch.params, batch.count)

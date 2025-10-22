@@ -1,4 +1,4 @@
-RegisterPlayerLoaderListener = function()
+RegisterPlayerLoader = function()
     RegisterNetEvent("esx:onPlayerSpawn", function()
         local src = source
         LoadPlayer(src)
@@ -10,6 +10,8 @@ RegisterPlayerLoaderListener = function()
             return
         end
 
-        Players[src] = player:saveAndDestroy()
+        player:save()
+
+        Players[src] = nil
     end)
 end

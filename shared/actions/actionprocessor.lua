@@ -43,10 +43,6 @@ if IsDuplicityVersion() then
 
                         local stepsToAdd = count
 
-                        if actionConfig.count_multiplier then
-                            stepsToAdd = math.floor(count * actionConfig.count_multiplier)
-                        end
-
                         if actionConfig.max_per_action then
                             stepsToAdd = math.min(stepsToAdd, actionConfig.max_per_action)
                         end

@@ -17,15 +17,25 @@ OnStop = function(func, onlyOnServerStop, onlyOnResourceStop)
 end
 
 local idCounter = GetResourceKvpInt("skills_id_gen") or 0
+local generating = false
 GenerateNewId = function()
-    idCounter = idCounter + 1
+    ::generateId::
+    if not generating then
+        generating = true
+        idCounter = idCounter + 1
 
-    if idCounter % Config.SaveThresholdIds == 0 then
-        SetResourceKvpInt("skills_id_gen", idCounter)
+        if idCounter % Config.SaveThresholdIds == 0 then
+            SetResourceKvpInt("skills_id_gen", idCounter)
+        end
+
+        generating = false
+        return idCounter
+    else
+        Citizen.Wait(0)
+        goto generateId
     end
-
-    return idCounter
 end
+
 OnStop(function() SetResourceKvpInt("skills_id_gen", idCounter) end)
 
 SourceIsStaffer = function(src)

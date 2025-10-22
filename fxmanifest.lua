@@ -11,6 +11,7 @@ shared_scripts {
     '@ox_lib/init.lua',
     'shared/config.lua',
     'shared/functions.lua',
+    'shared/typeCoercion.lua',
     'shared/actions/*.lua',
 }
 
@@ -22,6 +23,7 @@ server_scripts {
     'server/classes/*.lua',
     'server/managers/*.lua',
     'server/listeners/*.lua',
+    'server/loaders/*.lua',
     'server/main.lua'
 }
 

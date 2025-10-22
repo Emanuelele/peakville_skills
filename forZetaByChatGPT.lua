@@ -172,7 +172,6 @@ actionConfig: {
     "conditions": {
         "source_type": ["shop_sale", "business_income"]
     },
-    "count_multiplier": 0.001  -- 1000$ = 1 step
 }
 
 Quest: "Minatore Esperto"

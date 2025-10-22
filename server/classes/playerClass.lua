@@ -59,13 +59,6 @@ function Player:serialize()
     }
 end
 
-function Player:saveAndDestroy()
-    self:save()
-
-    self = nil
-    return nil
-end
-
 function Player:addTree(treeId)
     if not self.currentTrees[treeId] then
         self.currentTrees[treeId] = true
