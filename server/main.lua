@@ -35,7 +35,9 @@ end)
 Citizen.CreateThread(function()
     Citizen.Wait(5000)
     for _, src in ipairs(GetPlayers()) do
-        LoadPlayer(src)
+        if ESX.GetPlayerFromId(src) then
+            LoadPlayer(src)
+        end
     end
 end)
 

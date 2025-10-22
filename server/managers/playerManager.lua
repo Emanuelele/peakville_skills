@@ -52,42 +52,43 @@ SaveAllPlayers = function(serverStop)
         return
     end
 
-    local queries = {}
+    local values = {}
+    local queryData = {}
 
     for _, player in pairs(Players) do
         local data = player:serialize()
-        table.insert(queries, {
-            query = [[
-                INSERT INTO players (identifier, level, XP, tokens, maxActiveQuests, activeQuests, currentTrees, quests, skills)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-                ON DUPLICATE KEY UPDATE
-                    level = VALUES(level),
-                    XP = VALUES(XP),
-                    tokens = VALUES(tokens),
-                    maxActiveQuests = VALUES(maxActiveQuests),
-                    activeQuests = VALUES(activeQuests),
-                    currentTrees = VALUES(currentTrees),
-                    quests = VALUES(quests),
-                    skills = VALUES(skills)
-            ]],
-            values = {
-                data.identifier,
-                data.level,
-                data.XP,
-                data.tokens,
-                data.maxActiveQuests,
-                json.encode(data.activeQuests),
-                json.encode(data.currentTrees),
-                json.encode(data.quests),
-                json.encode(data.skills)
-            }
-        })
+        table.insert(values, "(?, ?, ?, ?, ?, ?, ?, ?, ?)")
+        table.insert(queryData, data.identifier)
+        table.insert(queryData, data.level)
+        table.insert(queryData, data.XP)
+        table.insert(queryData, data.tokens)
+        table.insert(queryData, data.maxActiveQuests)
+        table.insert(queryData, json.encode(data.activeQuests))
+        table.insert(queryData, json.encode(data.currentTrees))
+        table.insert(queryData, json.encode(data.quests))
+        table.insert(queryData, json.encode(data.skills))
     end
 
-    if serverStop then
-        MySQL.execute(queries)
-    else
-        MySQL.prepare(queries)
+    if #values > 0 then
+        local query = [[
+            INSERT INTO players (identifier, level, XP, tokens, maxActiveQuests, activeQuests, currentTrees, quests, skills)
+            VALUES ]] .. table.concat(values, ", ") .. [[
+            ON DUPLICATE KEY UPDATE
+                level = VALUES(level),
+                XP = VALUES(XP),
+                tokens = VALUES(tokens),
+                maxActiveQuests = VALUES(maxActiveQuests),
+                activeQuests = VALUES(activeQuests),
+                currentTrees = VALUES(currentTrees),
+                quests = VALUES(quests),
+                skills = VALUES(skills)
+        ]]
+
+        if serverStop then
+            MySQL.execute(query, queryData)
+        else
+            MySQL.prepare(query, queryData)
+        end
     end
 end
 

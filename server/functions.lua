@@ -76,6 +76,7 @@ LoadPlayer = function(src)
     local xPlayer = ESX.GetPlayerFromId(src)
     if not xPlayer or Players[src] then
         DropPlayer(src, "Errore inizializzazione skills")
+        return
     end
 
     local playerData = GetPlayerData(xPlayer.identifier)
