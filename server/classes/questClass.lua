@@ -3,14 +3,14 @@ Quest.__index = Quest
 
 function Quest:new(questData)
     self = setmetatable({}, Quest)
-    self.id = questData.id or GenerateNewId()
-    self.name = questData.name or ""
-    self.description = questData.description or ""
-    self.XP = questData.XP or 1
-    self.steps = questData.steps or 1
-    self.skillsReference = questData.skillsReference or {} --Riferimento agli id delle skill a cui la quest fa riferimento (puoi completare la quest se possiedi queste skill) (array)
-    self.requiredQuests = questData.requiredQuests or {} --Riferimento agli id delle quest richieste per sbloccare questa quest (array)
-    self.hidden = questData.hidden or false
+    self.id = questData?.id or GenerateNewId()
+    self.name = questData?.name or ""
+    self.description = questData?.description or ""
+    self.XP = questData?.XP or 1
+    self.steps = questData?.steps or 1
+    self.skillsReference = questData?.skillsReference or {} --Riferimento agli id delle skill a cui la quest fa riferimento (puoi completare la quest se possiedi queste skill) (array)
+    self.requiredQuests = questData?.requiredQuests or {} --Riferimento agli id delle quest richieste per sbloccare questa quest (array)
+    self.hidden = questData?.hidden or false
     return self
 end
 

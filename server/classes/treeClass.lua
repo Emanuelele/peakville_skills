@@ -3,10 +3,10 @@ Tree.__index = Tree
 
 function Tree:new(treeData)
     self = setmetatable({}, Tree)
-    self.id = treeData.id or GenerateNewId()
-    self.name = treeData.name or ""
-    self.description = treeData.description or ""
-    self.price = treeData.price or 1
+    self.id = treeData?.id or GenerateNewId()
+    self.name = treeData?.name or ""
+    self.description = treeData?.description or ""
+    self.price = treeData?.price or 1
     return self
 end
 

@@ -6,14 +6,14 @@ function Player:new(xPlayer, playerData)
     self.identifier = xPlayer.identifier
     self.source = xPlayer.source
 
-    self.level = playerData.level or 1
-    self.XP = playerData.XP or 0
-    self.tokens = playerData.tokens or Config.StartTokens
+    self.level = playerData?.level or 1
+    self.XP = playerData?.XP or 0
+    self.tokens = playerData?.tokens or Config.StartTokens
 
-    self.currentTrees = playerData.currentTrees or {}
+    self.currentTrees = playerData?.currentTrees or {}
 
-    self.quests = playerData.quests or {}
-    self.skills = playerData.skills or {}
+    self.quests = playerData?.quests or {}
+    self.skills = playerData?.skills or {}
     return self
 end
 
@@ -25,7 +25,7 @@ function Player:addExperience(value)
 
     TriggerClientEvent("peakville_skills:xpAdded", self.source, self.XP)
 
-    while self.XP >= RequiredXPForNextLevel(self.level) do
+    while self.XP >= RequiredXPForNextLevel(self.level) and self.level < Config.MaxLevel do
         self.XP = self.XP - RequiredXPForNextLevel(self.level)
         self.level = self.level + 1
         self.tokens = self.tokens + GetTokensForLevel(self.level)
@@ -104,6 +104,61 @@ end
 
 function Player:hasQuestInPool(quest)
     return self.quests[quest:getId()] ~= nil
+end
+
+function Player:CheckQuestRequirements(quest)
+    local skillsReference = quest:getSkillsReference()
+    if skillsReference and #skillsReference > 0 then
+        for _, skillId in ipairs(skillsReference) do
+            if not self.skills[skillId] then
+                return false
+            end
+        end
+    end
+
+    local requiredQuests = quest:getRequiredQuests()
+    if requiredQuests and #requiredQuests > 0 then
+        for _, requiredQuestId in ipairs(requiredQuests) do
+            local playerQuest = self.quests[requiredQuestId]
+            if not playerQuest or not playerQuest.completed then
+                return false
+            end
+        end
+    end
+
+    return true
+end
+
+function Player:CanUnlockQuest(quest)
+    if quest:getHidden() then
+        return false
+    end
+
+    return self:CheckQuestRequirements(quest)
+end
+
+function Player:RecalculatePlayerQuests()
+    local newQuests = {}
+
+    for questId, quest in pairs(Quests) do
+        local currentQuestData = self.quests[questId]
+
+        if currentQuestData then
+            if currentQuestData.completed then
+                newQuests[questId] = currentQuestData
+            elseif currentQuestData.currentStep > 0 then
+                if quest:getHidden() or self:CheckQuestRequirements(quest) then
+                    newQuests[questId] = currentQuestData
+                end
+            end
+        else
+            if self:CanUnlockQuest(quest) then
+                newQuests[questId] = PlayerQuest:new(quest, self)
+            end
+        end
+    end
+
+    self.quests = newQuests
 end
 
 --[[ GETTERS ]]

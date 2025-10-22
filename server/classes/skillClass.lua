@@ -3,15 +3,15 @@ Skill.__index = Skill
 
 function Skill:new(skillData)
     self = setmetatable({}, Skill)
-    self.id = skillData.id or GenerateNewId()
-    self.name = skillData.name or ""
-    self.description = skillData.description or ""
-    self.image = skillData.image or ""
-    self.price = skillData.price or 1
+    self.id = skillData?.id or GenerateNewId()
+    self.name = skillData?.name or ""
+    self.description = skillData?.description or ""
+    self.image = skillData?.image or ""
+    self.price = skillData?.price or 1
 
-    self.parentTree = skillData.parentTree --Riferimento all'id dell'albero genitore
-    self.previousSkills = skillData.previousSkills or {} --Riferimento agli id delle skill precedenti (array)
-    self.nextSkills = skillData.nextSkills or {} --Riferimento agli id delle skill successive (array)
+    self.parentTree = skillData?.parentTree or 0 --Riferimento all'id dell'albero genitore
+    self.previousSkills = skillData?.previousSkills or {} --Riferimento agli id delle skill precedenti (array)
+    self.nextSkills = skillData?.nextSkills or {} --Riferimento agli id delle skill successive (array)
 
     return self
 end
@@ -34,10 +34,8 @@ function Skill:isUnlockable(player)
         end
     end
 
-    for _, treeId in ipairs(self.parentTree) do
-        if not player:getCurrentTrees()[treeId] then
-            return false
-        end
+    if not player:getCurrentTrees()[self.parentTree] then
+        return false
     end
 
     return true

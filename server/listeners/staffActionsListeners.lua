@@ -253,13 +253,15 @@ RegisterStaffActionsDeleteListener = function()
         local questDeletedFromDb, _ = pcall(function() DeleteQuestFromDb(questId) end)
         if questDeletedFromDb then
             Quests[questId] = nil
-            
+
             for _, player in pairs(Players) do
-                if player.quests[questId] then
-                    player.quests[questId] = nil
+                if player:getQuests()[questId] then
+                    local newQuests = player:getQuests()
+                    newQuests[questId] = nil
+                    player:setQuests(newQuests)
                 end
             end
-            
+
             TriggerClientEvent("peakville_skills:questDeleted", -1, questId)
             return true
         end

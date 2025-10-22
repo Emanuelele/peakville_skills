@@ -6,8 +6,8 @@ function PlayerQuest:new(quest, player, playerQuestData)
     self = setmetatable({}, PlayerQuest)
     self.quest = quest --In fase di serializzazione salviamo solo l'id della quest, quando verrà istanziato il player sarà passato come parametro
     self.player = player --Non salvato in fase di srializzazione, quando verrà istanziato il player sarà passato come parametro
-    self.completed = playerQuestData and playerQuestData.completed or false
-    self.currentStep = playerQuestData and playerQuestData.currentStep or 0
+    self.completed = playerQuestData?.completed or false
+    self.currentStep = playerQuestData?.currentStep or 0
     return self
 end
 

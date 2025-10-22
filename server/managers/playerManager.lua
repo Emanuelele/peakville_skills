@@ -1,5 +1,5 @@
 GetPlayerData = function(identifier)
-    local result = MySQL.single.await('SELECT * FROM players WHERE identifier = ?', {identifier})
+    local result = MySQL.single.await('SELECT * FROM players WHERE identifier = ?', { identifier })
 
     if not result then
         return nil
@@ -20,18 +20,24 @@ end
 SavePlayerData = function(player)
     local data = player:serialize()
 
-    MySQL.update.await([[
-        UPDATE players 
-        SET level = ?, XP = ?, tokens = ?, currentTrees = ?, quests = ?, skills = ?
-        WHERE identifier = ?
+    MySQL.query.await([[
+    INSERT INTO players (identifier, level, XP, tokens, currentTrees, quests, skills)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE
+        level = VALUES(level),
+        XP = VALUES(XP),
+        tokens = VALUES(tokens),
+        currentTrees = VALUES(currentTrees),
+        quests = VALUES(quests),
+        skills = VALUES(skills)
     ]], {
+        data.identifier,
         data.level,
         data.XP,
         data.tokens,
         json.encode(data.currentTrees),
         json.encode(data.quests),
-        json.encode(data.skills),
-        data.identifier
+        json.encode(data.skills)
     })
 end
 

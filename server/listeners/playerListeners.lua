@@ -9,7 +9,7 @@ RegisterPlayerListener = function()
 
         local playerData = GetPlayerData(xPlayer.identifier)
         local player = Player:new(xPlayer, playerData)
-
+        RecalculatePlayerQuests(player)
         player:save()
 
         Players[src] = player
