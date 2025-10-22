@@ -30,8 +30,8 @@ server_scripts {
 client_scripts {
     'client/functions.lua',
     'client/main.lua',
+    'client/actions.lua',
     'client/ui.lua',
-    'client/actions.lua'
 }
 
 ui_page 'web/build/index.html'

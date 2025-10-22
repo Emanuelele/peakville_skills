@@ -12,7 +12,11 @@ export const StaffSection = ({ data }: StaffSectionProps) => {
     const [activeTab, setActiveTab] = useState<StaffTab>('trees');
 
     const handleSuccess = () => {
+        console.log('Operazione completata con successo');
     };
+
+    console.log('StaffSection render - activeTab:', activeTab);
+    console.log('StaffSection data:', data);
 
     return (
         <div className="staff-section">
@@ -23,19 +27,28 @@ export const StaffSection = ({ data }: StaffSectionProps) => {
             <div className="tabs">
                 <button 
                     className={`tab ${activeTab === 'trees' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('trees')}
+                    onClick={() => {
+                        console.log('Clicked trees tab');
+                        setActiveTab('trees');
+                    }}
                 >
                     Alberi
                 </button>
                 <button 
                     className={`tab ${activeTab === 'skills' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('skills')}
+                    onClick={() => {
+                        console.log('Clicked skills tab');
+                        setActiveTab('skills');
+                    }}
                 >
                     Skills
                 </button>
                 <button 
                     className={`tab ${activeTab === 'quests' ? 'active' : ''}`}
-                    onClick={() => setActiveTab('quests')}
+                    onClick={() => {
+                        console.log('Clicked quests tab');
+                        setActiveTab('quests');
+                    }}
                 >
                     Quest
                 </button>

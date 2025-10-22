@@ -3,6 +3,7 @@ import { Modal } from '../elements/Modal';
 import { TreeForm } from '../forms/TreeForm';
 import { SkillForm } from '../forms/SkillForm';
 import { QuestForm } from '../forms/QuestForm';
+import { Button } from '../elements/Button';
 import { fetchNui } from '../../utils/fetchNui';
 import type { Tree, Skill, Quest, InitData } from '../../types';
 
@@ -107,15 +108,21 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
     }
   };
 
+  const getEntityTitle = () => {
+    if (entityType === 'tree') return 'Albero';
+    if (entityType === 'skill') return 'Skill';
+    return 'Quest';
+  };
+
   return (
     <div className="staff-actions-manager">
       <div className="manager-header">
-        <button 
-          className="btn btn-primary"
+        <Button 
+          variant="primary"
           onClick={() => setIsCreateModalOpen(true)}
         >
-          Crea Nuovo {entityType === 'tree' ? 'Albero' : entityType === 'skill' ? 'Skill' : 'Quest'}
-        </button>
+          Crea Nuovo {getEntityTitle()}
+        </Button>
       </div>
 
       <div className="entities-list">
@@ -127,44 +134,48 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
               <span>Prezzo: {tree.price} token</span>
             </div>
             <div className="entity-actions">
-              <button 
-                className="btn btn-sm btn-primary"
+              <Button 
+                size="sm"
+                variant="primary"
                 onClick={() => openEditModal(tree.id)}
               >
                 Modifica
-              </button>
-              <button 
-                className="btn btn-sm btn-error"
+              </Button>
+              <Button 
+                size="sm"
+                variant="error"
                 onClick={() => handleDelete(tree.id)}
               >
                 Elimina
-              </button>
+              </Button>
             </div>
           </div>
         ))}
 
         {entityType === 'skill' && Object.values(data.skills).map((skill) => (
           <div key={skill.id} className="entity-item">
+            {skill.image && <img src={skill.image} alt={skill.name} className="entity-image" />}
             <div className="entity-info">
-              {skill.image && <img src={skill.image} alt={skill.name} className="entity-image" />}
               <h4>{skill.name}</h4>
               <p>{skill.description}</p>
               <span>Prezzo: {skill.price} token</span>
               <span>Albero: {data.trees[skill.parentTree]?.name || 'N/A'}</span>
             </div>
             <div className="entity-actions">
-              <button 
-                className="btn btn-sm btn-primary"
+              <Button 
+                size="sm"
+                variant="primary"
                 onClick={() => openEditModal(skill.id)}
               >
                 Modifica
-              </button>
-              <button 
-                className="btn btn-sm btn-error"
+              </Button>
+              <Button 
+                size="sm"
+                variant="error"
                 onClick={() => handleDelete(skill.id)}
               >
                 Elimina
-              </button>
+              </Button>
             </div>
           </div>
         ))}
@@ -181,18 +192,20 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
                 {quest.hidden && <span className="badge-warning">Nascosta</span>}
               </div>
               <div className="entity-actions">
-                <button 
-                  className="btn btn-sm btn-primary"
+                <Button 
+                  size="sm"
+                  variant="primary"
                   onClick={() => openEditModal(quest.id)}
                 >
                   Modifica
-                </button>
-                <button 
-                  className="btn btn-sm btn-error"
+                </Button>
+                <Button 
+                  size="sm"
+                  variant="error"
                   onClick={() => handleDelete(quest.id)}
                 >
                   Elimina
-                </button>
+                </Button>
               </div>
             </div>
           );
@@ -202,7 +215,7 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title={`Crea ${entityType === 'tree' ? 'Albero' : entityType === 'skill' ? 'Skill' : 'Quest'}`}
+        title={`Crea ${getEntityTitle()}`}
       >
         {entityType === 'tree' && (
           <TreeForm
@@ -236,7 +249,7 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
           setIsEditModalOpen(false);
           setSelectedId(null);
         }}
-        title={`Modifica ${entityType === 'tree' ? 'Albero' : entityType === 'skill' ? 'Skill' : 'Quest'}`}
+        title={`Modifica ${getEntityTitle()}`}
       >
         {entityType === 'tree' && (
           <TreeForm

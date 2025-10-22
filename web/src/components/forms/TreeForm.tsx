@@ -20,6 +20,7 @@ export const TreeForm = ({ tree, onSubmit, onCancel }: TreeFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    console.log('TreeForm mounted/updated - tree:', tree);
     if (tree) {
       setFormData({
         name: tree.name,
@@ -32,7 +33,11 @@ export const TreeForm = ({ tree, onSubmit, onCancel }: TreeFormProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('TreeForm submit - formData:', formData);
+    
     const validation = validateTreeData(formData);
+    console.log('TreeForm validation:', validation);
+    
     if (!validation.valid) {
       const errorMap: Record<string, string> = {};
       validation.errors.forEach(error => {
@@ -40,13 +45,16 @@ export const TreeForm = ({ tree, onSubmit, onCancel }: TreeFormProps) => {
         if (error.includes('prezzo')) errorMap.price = error;
       });
       setErrors(errorMap);
+      console.log('TreeForm validation errors:', errorMap);
       return;
     }
 
     setIsSubmitting(true);
     setErrors({});
 
+    console.log('TreeForm calling onSubmit...');
     const success = await onSubmit(formData);
+    console.log('TreeForm onSubmit result:', success);
     
     setIsSubmitting(false);
     
@@ -60,10 +68,14 @@ export const TreeForm = ({ tree, onSubmit, onCancel }: TreeFormProps) => {
       <Input
         label="Nome Albero"
         value={formData.name}
-        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        onChange={(e) => {
+          console.log('Name changed:', e.target.value);
+          setFormData({ ...formData, name: e.target.value });
+        }}
         error={errors.name}
         required
         maxLength={100}
+        placeholder="Es: Albero della Forza"
       />
 
       <div className="input-group">
@@ -71,8 +83,12 @@ export const TreeForm = ({ tree, onSubmit, onCancel }: TreeFormProps) => {
         <textarea
           className="input textarea"
           value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+          onChange={(e) => {
+            console.log('Description changed:', e.target.value);
+            setFormData({ ...formData, description: e.target.value });
+          }}
           rows={4}
+          placeholder="Descrizione dell'albero..."
         />
       </div>
 
@@ -80,17 +96,25 @@ export const TreeForm = ({ tree, onSubmit, onCancel }: TreeFormProps) => {
         label="Prezzo (Token)"
         type="number"
         value={formData.price}
-        onChange={(e) => setFormData({ ...formData, price: parseInt(e.target.value) || 1 })}
+        onChange={(e) => {
+          const value = parseInt(e.target.value) || 1;
+          console.log('Price changed:', value);
+          setFormData({ ...formData, price: value });
+        }}
         error={errors.price}
         required
         min={1}
+        placeholder="Es: 5"
       />
 
       <div className="form-actions">
         <Button type="submit" variant="primary" disabled={isSubmitting}>
           {isSubmitting ? 'Salvataggio...' : tree ? 'Aggiorna' : 'Crea'}
         </Button>
-        <Button type="button" variant="error" onClick={onCancel} disabled={isSubmitting}>
+        <Button type="button" variant="error" onClick={() => {
+          console.log('TreeForm cancel clicked');
+          onCancel();
+        }} disabled={isSubmitting}>
           Annulla
         </Button>
       </div>
