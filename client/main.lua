@@ -108,3 +108,7 @@ end)
 RegisterNetEvent("peakville_skills:skillDeleted", function(skillId)
     ClientData.skills[skillId] = nil
 end)
+
+RegisterNetEvent("peakville_skills:questsRecalculated", function(quests)
+    ClientData.quests = quests
+end)

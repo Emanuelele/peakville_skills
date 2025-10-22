@@ -231,11 +231,7 @@ RegisterStaffActionsDeleteListener = function()
             Quests[questId] = nil
 
             for _, player in pairs(Players) do
-                if player:getQuests()[questId] then
-                    local newQuests = player:getQuests()
-                    newQuests[questId] = nil
-                    player:setQuests(newQuests)
-                end
+                player:recalculatePlayerQuests()
             end
 
             return true
