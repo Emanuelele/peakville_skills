@@ -19,7 +19,7 @@ shared_scripts {
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
     'server/functions.lua',
-    'server/validators/*.lua',
+    'server/validator/*.lua',
     'server/classes/*.lua',
     'server/managers/*.lua',
     'server/listeners/*.lua',
