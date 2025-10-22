@@ -21,17 +21,19 @@ RetreiveSkillsFromDb = function()
 
     if results then
         for _, row in ipairs(results) do
-            local skillData = {
-                id = row.id,
-                name = row.name,
-                description = row.description,
-                image = row.image,
-                price = row.price,
-                parentTree = row.parentTree,
-                previousSkills = json.decode(row.previousSkills) or {},
-                nextSkills = json.decode(row.nextSkills) or {}
-            }
-            skills[row.id] = Skill:new(skillData)
+            if row?.id then
+                local skillData = {
+                    id = row.id,
+                    name = row.name,
+                    description = row.description,
+                    image = row.image,
+                    price = row.price,
+                    parentTree = row.parentTree,
+                    previousSkills = json.decode(row.previousSkills) or {},
+                    nextSkills = json.decode(row.nextSkills) or {}
+                }
+                skills[row.id] = Skill:new(skillData)
+            end
         end
     end
 

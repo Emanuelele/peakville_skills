@@ -17,16 +17,17 @@ RetreiveTreesFromDb = function()
 
     if results then
         for _, row in ipairs(results) do
-            local treeData = {
-                id = row.id,
-                name = row.name,
-                description = row.description,
-                price = row.price
-            }
-            trees[row.id] = Tree:new(treeData)
+            if row?.id then
+                local treeData = {
+                    id = row.id,
+                    name = row.name,
+                    description = row.description,
+                    price = row.price
+                }
+                trees[row.id] = Tree:new(treeData)
+            end
         end
     end
-
     return trees
 end
 

@@ -1,6 +1,6 @@
 RegisterActionsLoader = function()
     exports("PerformAction", function(source, actionKey, actionParams, count)
-        local player = Players[source]
+        local player = Players[tostring(source)]
         if not player then
             return
         end

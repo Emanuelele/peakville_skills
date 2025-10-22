@@ -1,3 +1,6 @@
+import { Card } from '../elements/Card';
+import { Button } from '../elements/Button';
+import { formatPercentage } from '../../utils/formatters';
 import type { InitData, PlayerQuest } from '../../types';
 import { fetchNui } from '../../utils/fetchNui';
 
@@ -28,11 +31,6 @@ export const QuestsSection = ({ data }: QuestsSectionProps) => {
         return getActiveQuestsCount() < data.player.maxActiveQuests;
     };
 
-    const getQuestProgress = (playerQuest: PlayerQuest): number => {
-        if (playerQuest.completed) return 100;
-        return Math.floor((playerQuest.currentStep / playerQuest.quest.steps) * 100);
-    };
-
     const activeQuests = Object.entries(data.quests)
         .filter(([questId]) => data.player.activeQuests[parseInt(questId)])
         .map(([, playerQuest]) => playerQuest);
@@ -45,91 +43,152 @@ export const QuestsSection = ({ data }: QuestsSectionProps) => {
         .filter(playerQuest => playerQuest.completed);
 
     return (
-        <div>
-            <h2>Gestione Quest</h2>
-
-            <div>
-                <h3>Statistiche Player</h3>
-                <p>Livello: {data.player.level}</p>
-                <p>XP: {data.player.XP}</p>
-                <p>Quest Attive: {getActiveQuestsCount()} / {data.player.maxActiveQuests}</p>
-                <p>Quest Completate: {completedQuests.length}</p>
+        <div className="quests-section">
+            <div className="stats-panel">
+                <div className="stat-item">
+                    <span className="stat-label">Livello</span>
+                    <span className="stat-value">{data.player.level}</span>
+                </div>
+                <div className="stat-item">
+                    <span className="stat-label">XP</span>
+                    <span className="stat-value">{data.player.XP}</span>
+                </div>
+                <div className="stat-item">
+                    <span className="stat-label">Quest Attive</span>
+                    <span className="stat-value">{getActiveQuestsCount()} / {data.player.maxActiveQuests}</span>
+                </div>
+                <div className="stat-item">
+                    <span className="stat-label">Quest Completate</span>
+                    <span className="stat-value">{completedQuests.length}</span>
+                </div>
             </div>
 
-            <div>
-                <h3>Quest Attive</h3>
-                {activeQuests.length === 0 ? (
-                    <p>Nessuna quest attiva</p>
-                ) : (
-                    activeQuests.map((playerQuest: PlayerQuest) => (
-                        <div key={playerQuest.quest.id}>
-                            <h4>{playerQuest.quest.name}</h4>
-                            <p>{playerQuest.quest.description}</p>
-                            <p>Ricompensa XP: {playerQuest.quest.XP}</p>
-                            <p>
-                                Progresso: {playerQuest.currentStep} / {playerQuest.quest.steps} 
-                                ({getQuestProgress(playerQuest)}%)
-                            </p>
-                            
-                            {playerQuest.quest.skillsReference.length > 0 && (
-                                <p>Skills associate: {playerQuest.quest.skillsReference.join(', ')}</p>
-                            )}
-                            
-                            <button onClick={() => handleDeselectQuest(playerQuest.quest.id)}>
-                                Deseleziona Quest
-                            </button>
-                        </div>
-                    ))
-                )}
-            </div>
+            <div className="quests-container">
+                <section className="quest-category">
+                    <h3>Quest Attive</h3>
+                    {activeQuests.length === 0 ? (
+                        <p className="empty-message">Nessuna quest attiva</p>
+                    ) : (
+                        <div className="grid">
+                            {activeQuests.map((playerQuest: PlayerQuest) => {
+                                const progress = formatPercentage(playerQuest.currentStep, playerQuest.quest.steps);
+                                
+                                return (
+                                    <Card
+                                        key={playerQuest.quest.id}
+                                        title={playerQuest.quest.name}
+                                        footer={
+                                            <Button
+                                                variant="error"
+                                                size="sm"
+                                                onClick={() => handleDeselectQuest(playerQuest.quest.id)}
+                                            >
+                                                Deseleziona
+                                            </Button>
+                                        }
+                                    >
+                                        <p>{playerQuest.quest.description}</p>
+                                        
+                                        <div className="quest-info">
+                                            <span>⭐ {playerQuest.quest.XP} XP</span>
+                                        </div>
 
-            <div>
-                <h3>Quest Disponibili</h3>
-                {!canSelectQuest() && (
-                    <p>Hai raggiunto il numero massimo di quest attive</p>
-                )}
-                {availableQuests.length === 0 ? (
-                    <p>Nessuna quest disponibile</p>
-                ) : (
-                    availableQuests.map((playerQuest: PlayerQuest) => (
-                        <div key={playerQuest.quest.id}>
-                            <h4>{playerQuest.quest.name}</h4>
-                            <p>{playerQuest.quest.description}</p>
-                            <p>Ricompensa XP: {playerQuest.quest.XP}</p>
-                            <p>Steps richiesti: {playerQuest.quest.steps}</p>
-                            
-                            {playerQuest.quest.skillsReference.length > 0 && (
-                                <p>Richiede skills: {playerQuest.quest.skillsReference.join(', ')}</p>
-                            )}
-                            
-                            {playerQuest.quest.requiredQuests.length > 0 && (
-                                <p>Richiede quest: {playerQuest.quest.requiredQuests.join(', ')}</p>
-                            )}
-                            
-                            <button 
-                                onClick={() => handleSelectQuest(playerQuest.quest.id)}
-                                disabled={!canSelectQuest()}
-                            >
-                                Seleziona Quest
-                            </button>
-                        </div>
-                    ))
-                )}
-            </div>
+                                        <div className="progress-container">
+                                            <div className="progress-bar">
+                                                <div 
+                                                    className="progress-fill" 
+                                                    style={{ width: `${progress}%` }}
+                                                />
+                                            </div>
+                                            <span className="progress-text">
+                                                {playerQuest.currentStep} / {playerQuest.quest.steps} ({progress}%)
+                                            </span>
+                                        </div>
 
-            <div>
-                <h3>Quest Completate</h3>
-                {completedQuests.length === 0 ? (
-                    <p>Nessuna quest completata</p>
-                ) : (
-                    completedQuests.map((playerQuest: PlayerQuest) => (
-                        <div key={playerQuest.quest.id}>
-                            <h4>{playerQuest.quest.name}</h4>
-                            <p>{playerQuest.quest.description}</p>
-                            <p>XP ottenuto: {playerQuest.quest.XP}</p>
+                                        {playerQuest.quest.skillsReference.length > 0 && (
+                                            <div className="quest-requirements">
+                                                <small>Skills: {playerQuest.quest.skillsReference.join(', ')}</small>
+                                            </div>
+                                        )}
+                                    </Card>
+                                );
+                            })}
                         </div>
-                    ))
-                )}
+                    )}
+                </section>
+
+                <section className="quest-category">
+                    <h3>Quest Disponibili</h3>
+                    {!canSelectQuest() && (
+                        <div className="warning-message">
+                            Hai raggiunto il numero massimo di quest attive
+                        </div>
+                    )}
+                    {availableQuests.length === 0 ? (
+                        <p className="empty-message">Nessuna quest disponibile</p>
+                    ) : (
+                        <div className="grid">
+                            {availableQuests.map((playerQuest: PlayerQuest) => (
+                                <Card
+                                    key={playerQuest.quest.id}
+                                    title={playerQuest.quest.name}
+                                    footer={
+                                        <Button
+                                            variant="primary"
+                                            size="sm"
+                                            onClick={() => handleSelectQuest(playerQuest.quest.id)}
+                                            disabled={!canSelectQuest()}
+                                        >
+                                            Seleziona
+                                        </Button>
+                                    }
+                                >
+                                    <p>{playerQuest.quest.description}</p>
+                                    
+                                    <div className="quest-info">
+                                        <span>⭐ {playerQuest.quest.XP} XP</span>
+                                        <span>📊 {playerQuest.quest.steps} steps</span>
+                                    </div>
+
+                                    {playerQuest.quest.skillsReference.length > 0 && (
+                                        <div className="quest-requirements">
+                                            <small>Richiede skills: {playerQuest.quest.skillsReference.join(', ')}</small>
+                                        </div>
+                                    )}
+
+                                    {playerQuest.quest.requiredQuests.length > 0 && (
+                                        <div className="quest-requirements">
+                                            <small>Richiede quest: {playerQuest.quest.requiredQuests.join(', ')}</small>
+                                        </div>
+                                    )}
+                                </Card>
+                            ))}
+                        </div>
+                    )}
+                </section>
+
+                <section className="quest-category">
+                    <h3>Quest Completate</h3>
+                    {completedQuests.length === 0 ? (
+                        <p className="empty-message">Nessuna quest completata</p>
+                    ) : (
+                        <div className="grid">
+                            {completedQuests.map((playerQuest: PlayerQuest) => (
+                                <Card
+                                    key={playerQuest.quest.id}
+                                    title={playerQuest.quest.name}
+                                >
+                                    <p>{playerQuest.quest.description}</p>
+                                    
+                                    <div className="quest-info">
+                                        <span className="completed">✓ Completata</span>
+                                        <span>⭐ {playerQuest.quest.XP} XP</span>
+                                    </div>
+                                </Card>
+                            ))}
+                        </div>
+                    )}
+                </section>
             </div>
         </div>
     );

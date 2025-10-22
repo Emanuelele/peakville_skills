@@ -9,10 +9,6 @@ interface ModalProps {
 
 export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   useEffect(() => {
-    console.log('Modal render - isOpen:', isOpen);
-  }, [isOpen]);
-
-  useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -31,16 +27,12 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
   }, [isOpen, onClose]);
 
   if (!isOpen) {
-    console.log('Modal not rendering - isOpen is false');
     return null;
   }
-
-  console.log('Modal rendering with title:', title);
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => {
-        console.log('Modal content clicked - stopping propagation');
         e.stopPropagation();
       }}>
         <div className="modal-header">
@@ -48,7 +40,6 @@ export const Modal = ({ isOpen, onClose, title, children }: ModalProps) => {
           <button 
             className="modal-close" 
             onClick={() => {
-              console.log('Modal close button clicked');
               onClose();
             }}
           >

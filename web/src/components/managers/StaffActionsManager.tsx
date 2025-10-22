@@ -115,179 +115,185 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
   };
 
   return (
-    <div className="staff-actions-manager">
-      <div className="manager-header">
-        <Button 
-          variant="primary"
-          onClick={() => setIsCreateModalOpen(true)}
-        >
-          Crea Nuovo {getEntityTitle()}
-        </Button>
-      </div>
+    <>
+      <div className="staff-actions-manager">
+        <div className="manager-header">
+          <Button 
+            variant="primary"
+            onClick={() => setIsCreateModalOpen(true)}
+          >
+            Crea Nuovo {getEntityTitle()}
+          </Button>
+        </div>
 
-      <div className="entities-list">
-        {entityType === 'tree' && Object.values(data.trees).map((tree) => (
-          <div key={tree.id} className="entity-item">
-            <div className="entity-info">
-              <h4>{tree.name}</h4>
-              <p>{tree.description}</p>
-              <span>Prezzo: {tree.price} token</span>
-            </div>
-            <div className="entity-actions">
-              <Button 
-                size="sm"
-                variant="primary"
-                onClick={() => openEditModal(tree.id)}
-              >
-                Modifica
-              </Button>
-              <Button 
-                size="sm"
-                variant="error"
-                onClick={() => handleDelete(tree.id)}
-              >
-                Elimina
-              </Button>
-            </div>
-          </div>
-        ))}
-
-        {entityType === 'skill' && Object.values(data.skills).map((skill) => (
-          <div key={skill.id} className="entity-item">
-            {skill.image && <img src={skill.image} alt={skill.name} className="entity-image" />}
-            <div className="entity-info">
-              <h4>{skill.name}</h4>
-              <p>{skill.description}</p>
-              <span>Prezzo: {skill.price} token</span>
-              <span>Albero: {data.trees[skill.parentTree]?.name || 'N/A'}</span>
-            </div>
-            <div className="entity-actions">
-              <Button 
-                size="sm"
-                variant="primary"
-                onClick={() => openEditModal(skill.id)}
-              >
-                Modifica
-              </Button>
-              <Button 
-                size="sm"
-                variant="error"
-                onClick={() => handleDelete(skill.id)}
-              >
-                Elimina
-              </Button>
-            </div>
-          </div>
-        ))}
-
-        {entityType === 'quest' && Object.values(data.quests).map((playerQuest) => {
-          const quest = playerQuest.quest;
-          return (
-            <div key={quest.id} className="entity-item">
+        <div className="entities-list">
+          {entityType === 'tree' && Object.values(data.trees).map((tree) => (
+            <div key={tree.id} className="entity-item">
               <div className="entity-info">
-                <h4>{quest.name}</h4>
-                <p>{quest.description}</p>
-                <span>XP: {quest.XP}</span>
-                <span>Steps: {quest.steps}</span>
-                {quest.hidden && <span className="badge-warning">Nascosta</span>}
+                <h4>{tree.name}</h4>
+                <p>{tree.description}</p>
+                <span>Prezzo: {tree.price} token</span>
               </div>
               <div className="entity-actions">
                 <Button 
                   size="sm"
                   variant="primary"
-                  onClick={() => openEditModal(quest.id)}
+                  onClick={() => openEditModal(tree.id)}
                 >
                   Modifica
                 </Button>
                 <Button 
                   size="sm"
                   variant="error"
-                  onClick={() => handleDelete(quest.id)}
+                  onClick={() => handleDelete(tree.id)}
                 >
                   Elimina
                 </Button>
               </div>
             </div>
-          );
-        })}
+          ))}
+
+          {entityType === 'skill' && Object.values(data.skills).map((skill) => (
+            <div key={skill.id} className="entity-item">
+              {skill.image && <img src={skill.image} alt={skill.name} className="entity-image" />}
+              <div className="entity-info">
+                <h4>{skill.name}</h4>
+                <p>{skill.description}</p>
+                <span>Prezzo: {skill.price} token</span>
+                <span>Albero: {data.trees[skill.parentTree]?.name || 'N/A'}</span>
+              </div>
+              <div className="entity-actions">
+                <Button 
+                  size="sm"
+                  variant="primary"
+                  onClick={() => openEditModal(skill.id)}
+                >
+                  Modifica
+                </Button>
+                <Button 
+                  size="sm"
+                  variant="error"
+                  onClick={() => handleDelete(skill.id)}
+                >
+                  Elimina
+                </Button>
+              </div>
+            </div>
+          ))}
+
+          {entityType === 'quest' && Object.values(data.quests).map((playerQuest) => {
+            const quest = playerQuest.quest;
+            return (
+              <div key={quest.id} className="entity-item">
+                <div className="entity-info">
+                  <h4>{quest.name}</h4>
+                  <p>{quest.description}</p>
+                  <span>XP: {quest.XP}</span>
+                  <span>Steps: {quest.steps}</span>
+                  {quest.hidden && <span className="badge-warning">Nascosta</span>}
+                </div>
+                <div className="entity-actions">
+                  <Button 
+                    size="sm"
+                    variant="primary"
+                    onClick={() => openEditModal(quest.id)}
+                  >
+                    Modifica
+                  </Button>
+                  <Button 
+                    size="sm"
+                    variant="error"
+                    onClick={() => handleDelete(quest.id)}
+                  >
+                    Elimina
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
-      <Modal
-        isOpen={isCreateModalOpen}
-        onClose={() => setIsCreateModalOpen(false)}
-        title={`Crea ${getEntityTitle()}`}
-      >
-        {entityType === 'tree' && (
-          <TreeForm
-            onSubmit={handleCreate}
-            onCancel={() => setIsCreateModalOpen(false)}
-          />
-        )}
-        {entityType === 'skill' && (
-          <SkillForm
-            trees={data.trees}
-            skills={data.skills}
-            onSubmit={handleCreate}
-            onCancel={() => setIsCreateModalOpen(false)}
-          />
-        )}
-        {entityType === 'quest' && (
-          <QuestForm
-            skills={data.skills}
-            quests={Object.fromEntries(
-              Object.entries(data.quests).map(([id, pq]) => [id, pq.quest])
-            )}
-            onSubmit={handleCreate}
-            onCancel={() => setIsCreateModalOpen(false)}
-          />
-        )}
-      </Modal>
+      {isCreateModalOpen && (
+        <Modal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          title={`Crea ${getEntityTitle()}`}
+        >
+          {entityType === 'tree' && (
+            <TreeForm
+              onSubmit={handleCreate}
+              onCancel={() => setIsCreateModalOpen(false)}
+            />
+          )}
+          {entityType === 'skill' && (
+            <SkillForm
+              trees={data.trees}
+              skills={data.skills}
+              onSubmit={handleCreate}
+              onCancel={() => setIsCreateModalOpen(false)}
+            />
+          )}
+          {entityType === 'quest' && (
+            <QuestForm
+              skills={data.skills}
+              quests={Object.fromEntries(
+                Object.entries(data.quests).map(([id, pq]) => [id, pq.quest])
+              )}
+              onSubmit={handleCreate}
+              onCancel={() => setIsCreateModalOpen(false)}
+            />
+          )}
+        </Modal>
+      )}
 
-      <Modal
-        isOpen={isEditModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false);
-          setSelectedId(null);
-        }}
-        title={`Modifica ${getEntityTitle()}`}
-      >
-        {entityType === 'tree' && (
-          <TreeForm
-            tree={getSelectedEntity() as Tree}
-            onSubmit={handleEdit}
-            onCancel={() => {
-              setIsEditModalOpen(false);
-              setSelectedId(null);
-            }}
-          />
-        )}
-        {entityType === 'skill' && (
-          <SkillForm
-            skill={getSelectedEntity() as Skill}
-            trees={data.trees}
-            skills={data.skills}
-            onSubmit={handleEdit}
-            onCancel={() => {
-              setIsEditModalOpen(false);
-              setSelectedId(null);
-            }}
-          />
-        )}
-        {entityType === 'quest' && (
-          <QuestForm
-            quest={getSelectedEntity() as Quest}
-            skills={data.skills}
-            quests={Object.fromEntries(
-              Object.entries(data.quests).map(([id, pq]) => [id, pq.quest])
-            )}
-            onSubmit={handleEdit}
-            onCancel={() => {
-              setIsEditModalOpen(false);
-              setSelectedId(null);
-            }}
-          />
-        )}
-      </Modal>
-    </div>
+      {isEditModalOpen && (
+        <Modal
+          isOpen={isEditModalOpen}
+          onClose={() => {
+            setIsEditModalOpen(false);
+            setSelectedId(null);
+          }}
+          title={`Modifica ${getEntityTitle()}`}
+        >
+          {entityType === 'tree' && (
+            <TreeForm
+              tree={getSelectedEntity() as Tree}
+              onSubmit={handleEdit}
+              onCancel={() => {
+                setIsEditModalOpen(false);
+                setSelectedId(null);
+              }}
+            />
+          )}
+          {entityType === 'skill' && (
+            <SkillForm
+              skill={getSelectedEntity() as Skill}
+              trees={data.trees}
+              skills={data.skills}
+              onSubmit={handleEdit}
+              onCancel={() => {
+                setIsEditModalOpen(false);
+                setSelectedId(null);
+              }}
+            />
+          )}
+          {entityType === 'quest' && (
+            <QuestForm
+              quest={getSelectedEntity() as Quest}
+              skills={data.skills}
+              quests={Object.fromEntries(
+                Object.entries(data.quests).map(([id, pq]) => [id, pq.quest])
+              )}
+              onSubmit={handleEdit}
+              onCancel={() => {
+                setIsEditModalOpen(false);
+                setSelectedId(null);
+              }}
+            />
+          )}
+        </Modal>
+      )}
+    </>
   );
 };

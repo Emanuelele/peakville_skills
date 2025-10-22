@@ -21,18 +21,20 @@ RetreiveQuestsFromDb = function()
 
     if results then
         for _, row in ipairs(results) do
-            local questData = {
-                id = row.id,
-                name = row.name,
-                description = row.description,
-                XP = row.XP,
-                steps = row.steps,
-                skillsReference = json.decode(row.skillsReference) or {},
-                requiredQuests = json.decode(row.requiredQuests) or {},
-                actionConfig = json.decode(row.actionConfig) or {},
-                hidden = row.hidden
-            }
-            quests[row.id] = Quest:new(questData)
+            if row?.id then
+                local questData = {
+                    id = row.id,
+                    name = row.name,
+                    description = row.description,
+                    XP = row.XP,
+                    steps = row.steps,
+                    skillsReference = json.decode(row.skillsReference) or {},
+                    requiredQuests = json.decode(row.requiredQuests) or {},
+                    actionConfig = json.decode(row.actionConfig) or {},
+                    hidden = row.hidden
+                }
+                quests[row.id] = Quest:new(questData)
+            end
         end
     end
 
