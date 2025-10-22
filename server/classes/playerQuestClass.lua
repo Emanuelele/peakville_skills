@@ -12,6 +12,21 @@ function PlayerQuest:new(quest, player, playerQuestData)
 end
 
 
+--[[ STATIC METHODS ]]
+
+function PlayerQuest.deserialize(serializedData, player)
+    local quest = Quests[serializedData.questId]
+    if not quest then
+        return nil
+    end
+
+    return PlayerQuest:new(quest, player, {
+        completed = serializedData?.completed,
+        currentStep = serializedData?.currentStep
+    })
+end
+
+
 --[[ METHODS ]]
 
 function PlayerQuest:complete()

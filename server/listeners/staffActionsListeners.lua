@@ -44,7 +44,7 @@ RegisterStaffActionsInsertListener = function()
             if questInsertedOnDb then
                 Quests[quest:getId()] = quest
                 for _, player in pairs(Players) do
-                    RecalculatePlayerQuests(player)
+                    player:recalculatePlayerQuests()
                 end
                 if not quest:getHidden() then
                     TriggerClientEvent("peakville_skills:newQuestCreated", -1, {
@@ -161,7 +161,7 @@ RegisterStaffActionsEditListener = function()
             local questUpdatedOnDb, _ = pcall(function() UpdateQuestOnDb(updatedQuest) end)
             if questUpdatedOnDb then
                 for _, player in pairs(Players) do
-                    RecalculatePlayerQuests(player)
+                    player:recalculatePlayerQuests()
                 end
                 if not updatedQuest:getHidden() then
                     TriggerClientEvent("peakville_skills:questUpdated", -1, {

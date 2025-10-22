@@ -38,13 +38,18 @@ function Player:save()
 end
 
 function Player:serialize()
+    local serializedQuests = {}
+    for questId, playerQuest in pairs(self.quests) do
+        serializedQuests[questId] = playerQuest:serialize()
+    end
+
     return {
         identifier = self.identifier,
         level = self.level,
         XP = self.XP,
         tokens = self.tokens,
         currentTrees = self.currentTrees,
-        quests = self.quests,
+        quests = serializedQuests,
         skills = self.skills
     }
 end
@@ -84,7 +89,7 @@ function Player:addSkill(skill)
         if tokensPrediction >= 0 then
             self.tokens = tokensPrediction
             self.skills[skill:getId()] = true
-            RecalculatePlayerQuests(self)
+            self:recalculatePlayerQuests()
             return true
         end
         return false
@@ -96,7 +101,7 @@ function Player:removeSkill(skill)
     if self.skills[skill:getId()] then
         self.tokens = self.tokens + skill:getRefoundPrice()
         self.skills[skill:getId()] = nil
-        RecalculatePlayerQuests(self)
+        self:recalculatePlayerQuests()
         return true
     end
     return false
@@ -106,7 +111,7 @@ function Player:hasQuestInPool(quest)
     return self.quests[quest:getId()] ~= nil
 end
 
-function Player:CheckQuestRequirements(quest)
+function Player:checkQuestRequirements(quest)
     local skillsReference = quest:getSkillsReference()
     if skillsReference and #skillsReference > 0 then
         for _, skillId in ipairs(skillsReference) do
@@ -129,15 +134,15 @@ function Player:CheckQuestRequirements(quest)
     return true
 end
 
-function Player:CanUnlockQuest(quest)
+function Player:canUnlockQuest(quest)
     if quest:getHidden() then
         return false
     end
 
-    return self:CheckQuestRequirements(quest)
+    return self:checkQuestRequirements(quest)
 end
 
-function Player:RecalculatePlayerQuests()
+function Player:recalculatePlayerQuests()
     local newQuests = {}
 
     for questId, quest in pairs(Quests) do
@@ -147,12 +152,12 @@ function Player:RecalculatePlayerQuests()
             if currentQuestData.completed then
                 newQuests[questId] = currentQuestData
             elseif currentQuestData.currentStep > 0 then
-                if quest:getHidden() or self:CheckQuestRequirements(quest) then
+                if quest:getHidden() or self:checkQuestRequirements(quest) then
                     newQuests[questId] = currentQuestData
                 end
             end
         else
-            if self:CanUnlockQuest(quest) then
+            if self:canUnlockQuest(quest) then
                 newQuests[questId] = PlayerQuest:new(quest, self)
             end
         end

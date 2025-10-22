@@ -46,3 +46,14 @@ SaveAllPlayers = function()
         player:save()
     end
 end
+
+DeserializePlayerQuests = function(serializedQuests, player)
+    local quests = {}
+    for questId, questData in pairs(serializedQuests) do
+        local playerQuest = PlayerQuest.deserialize(questData, player)
+        if playerQuest then
+            quests[questId] = playerQuest
+        end
+    end
+    return quests
+end
