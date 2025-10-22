@@ -1,6 +1,7 @@
+```lua
 --[[
     ESEMPI DI INTEGRAZIONE PER SCRIPT ESTERNI
-    Questi sono esempi pratici di come integrare il sistema di azioni
+    Signor zeta, questi sono esempi pratici di come integrare il sistema di azioni
     nei tuoi script esistenti
 ]]
 
@@ -156,7 +157,7 @@ end)
 -- CONFIGURAZIONI QUEST ESEMPI (da inserire nel DB)
 -- ============================================
 
---[[
+
 Quest: "Cecchino Elite"
 actionConfig: {
     "action": "player_kill",
@@ -183,5 +184,6 @@ actionConfig: {
     },
     "max_per_action": 10  -- Max 10 step per singola azione
 }
-]]
 
+
+```

@@ -1,9 +1,17 @@
 Validator = {}
 
-Validator.validate = function(data, schema)
+Validator.validate = function(data, schema, visited)
     if type(data) ~= "table" then
         return false, "Data must be a table"
     end
+
+    visited = visited or {}
+
+    if visited[data] then
+        return true
+    end
+
+    visited[data] = true
 
     for field, rules in pairs(schema) do
         local value = data[field]
@@ -22,13 +30,28 @@ Validator.validate = function(data, schema)
                     return false, string.format("Field '%s' must be an array", field)
                 end
 
+                if visited[value] then
+                    goto continue
+                end
+
+                visited[value] = true
+
                 if rules.items then
                     for i, item in ipairs(value) do
+                        if type(item) == "table" then
+                            if visited[item] then
+                                goto continue_array
+                            end
+                            visited[item] = true
+                        end
+
                         local coerced, coercedItem = TypeCoercion.CoerceValue(item, rules.items)
                         if not coerced then
                             return false, string.format("Field '%s[%d]' must be of type '%s'", field, i, rules.items)
                         end
                         value[i] = coercedItem
+
+                        ::continue_array::
                     end
                 end
             elseif fieldType == "table" then
@@ -36,8 +59,12 @@ Validator.validate = function(data, schema)
                     return false, string.format("Field '%s' must be a table", field)
                 end
 
+                if visited[value] then
+                    goto continue
+                end
+
                 if rules.schema then
-                    local valid, err = Validator.validate(value, rules.schema)
+                    local valid, err = Validator.validate(value, rules.schema, visited)
                     if not valid then
                         return false, string.format("Field '%s': %s", field, err)
                     end
@@ -66,6 +93,8 @@ Validator.validate = function(data, schema)
             if rules.maxLength and type(value) == "string" and #value > rules.maxLength then
                 return false, string.format("Field '%s' must have at most %d characters", field, rules.maxLength)
             end
+
+            ::continue::
         end
     end
 
