@@ -45,6 +45,10 @@ function PlayerQuest:nextSteps(stepsNumber)
         return
     end
 
+    if not self.player:isQuestActive(self.quest:getId()) then
+        return
+    end
+
     if self.currentStep + stepsNumber >= self.quest:getSteps() then
         self:complete()
         return

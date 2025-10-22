@@ -9,6 +9,8 @@ GetPlayerData = function(identifier)
         level = result.level,
         XP = result.XP,
         tokens = result.tokens,
+        maxActiveQuests = result.maxActiveQuests,
+        activeQuests = json.decode(result.activeQuests) or {},
         currentTrees = json.decode(result.currentTrees) or {},
         quests = json.decode(result.quests) or {},
         skills = json.decode(result.skills) or {}
@@ -21,12 +23,14 @@ SavePlayerData = function(player)
     local data = player:serialize()
 
     MySQL.query.await([[
-    INSERT INTO players (identifier, level, XP, tokens, currentTrees, quests, skills)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO players (identifier, level, XP, tokens, maxActiveQuests, activeQuests, currentTrees, quests, skills)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON DUPLICATE KEY UPDATE
         level = VALUES(level),
         XP = VALUES(XP),
         tokens = VALUES(tokens),
+        maxActiveQuests = VALUES(maxActiveQuests),
+        activeQuests = VALUES(activeQuests),
         currentTrees = VALUES(currentTrees),
         quests = VALUES(quests),
         skills = VALUES(skills)
@@ -35,15 +39,55 @@ SavePlayerData = function(player)
         data.level,
         data.XP,
         data.tokens,
+        data.maxActiveQuests,
+        json.encode(data.activeQuests),
         json.encode(data.currentTrees),
         json.encode(data.quests),
         json.encode(data.skills)
     })
 end
 
-SaveAllPlayers = function()
+SaveAllPlayers = function(serverStop)
+    if next(Players) == nil then
+        return
+    end
+
+    local queries = {}
+
     for _, player in pairs(Players) do
-        player:save()
+        local data = player:serialize()
+        table.insert(queries, {
+            query = [[
+                INSERT INTO players (identifier, level, XP, tokens, maxActiveQuests, activeQuests, currentTrees, quests, skills)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE
+                    level = VALUES(level),
+                    XP = VALUES(XP),
+                    tokens = VALUES(tokens),
+                    maxActiveQuests = VALUES(maxActiveQuests),
+                    activeQuests = VALUES(activeQuests),
+                    currentTrees = VALUES(currentTrees),
+                    quests = VALUES(quests),
+                    skills = VALUES(skills)
+            ]],
+            values = {
+                data.identifier,
+                data.level,
+                data.XP,
+                data.tokens,
+                data.maxActiveQuests,
+                json.encode(data.activeQuests),
+                json.encode(data.currentTrees),
+                json.encode(data.quests),
+                json.encode(data.skills)
+            }
+        })
+    end
+
+    if serverStop then
+        MySQL.execute(queries)
+    else
+        MySQL.prepare(queries)
     end
 end
 

@@ -9,16 +9,20 @@ GetTokensForLevel = function(level)
     return level % 10 == 0 and 3 or (level % 5 == 0 and 2 or 1)
 end
 
-OnStop = function(func)
-    RegisterNetEvent("txAdmin:events:serverShuttingDown", function()
-        if type(func) == "function" then
-            func()
-        end
-    end)
+OnStop = function(func, onlyOnServerStop, onlyOnResourceStop)
+    if not onlyOnResourceStop then
+        RegisterNetEvent("txAdmin:events:serverShuttingDown", function()
+            if type(func) == "function" then
+                func()
+            end
+        end)
+    end
 
-    RegisterNetEvent("onResourceStop", function(resourceName) 
-        if resourceName == "peakville_skills" and type(func) == "function" then
-            func()
-        end
-    end)
+    if not onlyOnServerStop then
+        RegisterNetEvent("onResourceStop", function(resourceName)
+            if resourceName == "peakville_skills" and type(func) == "function" then
+                func()
+            end
+        end)
+    end
 end

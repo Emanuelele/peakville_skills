@@ -14,6 +14,9 @@ function Player:new(xPlayer, playerData)
 
     self.quests = playerData?.quests or {}
     self.skills = playerData?.skills or {}
+
+    self.maxActiveQuests = playerData?.maxActiveQuests or Config.DefaultMaxActiveQuests
+    self.activeQuests = playerData?.activeQuests or {}
     return self
 end
 
@@ -48,6 +51,8 @@ function Player:serialize()
         level = self.level,
         XP = self.XP,
         tokens = self.tokens,
+        maxActiveQuests = self.maxActiveQuests,
+        activeQuests = self.activeQuests,
         currentTrees = self.currentTrees,
         quests = serializedQuests,
         skills = self.skills
@@ -61,46 +66,34 @@ function Player:saveAndDestroy()
     return nil
 end
 
-function Player:addTree(tree)
-    if not self.currentTrees[tree:getId()] then
-        local tokensPrediction = self.tokens - tree:getPrice()
-        if tokensPrediction >= 0 then
-            self.tokens = tokensPrediction
-            self.currentTrees[tree:getId()] = true
-            return true
-        end
-        return false
-    end
-    return false
-end
-
-function Player:removeTree(tree)
-    if self.currentTrees[tree:getId()] then
-        self.tokens = self.tokens + tree:getRefoundPrice()
-        self.currentTrees[tree:getId()] = nil
+function Player:addTree(treeId)
+    if not self.currentTrees[treeId] then
+        self.currentTrees[treeId] = true
         return true
     end
     return false
 end
 
-function Player:addSkill(skill)
-    if not self.skills[skill:getId()] and skill:isUnlockable(self) then
-        local tokensPrediction = self.tokens - skill:getPrice()
-        if tokensPrediction >= 0 then
-            self.tokens = tokensPrediction
-            self.skills[skill:getId()] = true
-            self:recalculatePlayerQuests()
-            return true
-        end
-        return false
+function Player:removeTree(treeId)
+    if self.currentTrees[treeId] then
+        self.currentTrees[treeId] = nil
+        return true
     end
     return false
 end
 
-function Player:removeSkill(skill)
-    if self.skills[skill:getId()] then
-        self.tokens = self.tokens + skill:getRefoundPrice()
-        self.skills[skill:getId()] = nil
+function Player:addSkill(skillId)
+    if not self.skills[skillId] then
+        self.skills[skillId] = true
+        self:recalculatePlayerQuests()
+        return true
+    end
+    return false
+end
+
+function Player:removeSkill(skillId)
+    if self.skills[skillId] then
+        self.skills[skillId] = nil
         self:recalculatePlayerQuests()
         return true
     end
@@ -113,7 +106,8 @@ end
 
 function Player:checkQuestRequirements(quest)
     local skillsReference = quest:getSkillsReference()
-    if skillsReference and #skillsReference > 0 then
+
+    if #skillsReference > 0 then
         for _, skillId in ipairs(skillsReference) do
             if not self.skills[skillId] then
                 return false
@@ -122,7 +116,7 @@ function Player:checkQuestRequirements(quest)
     end
 
     local requiredQuests = quest:getRequiredQuests()
-    if requiredQuests and #requiredQuests > 0 then
+    if #requiredQuests > 0 then
         for _, requiredQuestId in ipairs(requiredQuests) do
             local playerQuest = self.quests[requiredQuestId]
             if not playerQuest or not playerQuest.completed then
@@ -148,22 +142,53 @@ function Player:recalculatePlayerQuests()
     for questId, quest in pairs(Quests) do
         local currentQuestData = self.quests[questId]
 
-        if currentQuestData then
-            if currentQuestData.completed then
+        if currentQuestData?.completed then
+            newQuests[questId] = currentQuestData
+        elseif currentQuestData?.currentStep > 0 then
+            if quest:getHidden() or self:checkQuestRequirements(quest) then
                 newQuests[questId] = currentQuestData
-            elseif currentQuestData.currentStep > 0 then
-                if quest:getHidden() or self:checkQuestRequirements(quest) then
-                    newQuests[questId] = currentQuestData
-                end
             end
-        else
-            if self:canUnlockQuest(quest) then
-                newQuests[questId] = PlayerQuest:new(quest, self)
-            end
+        elseif self:canUnlockQuest(quest) then
+            newQuests[questId] = PlayerQuest:new(quest, self)
         end
     end
 
     self.quests = newQuests
+end
+
+function Player:selectQuest(questId)
+    if self.quests[questId] and not self.activeQuests[questId] then
+        if self:getActiveQuestsCount() >= self.maxActiveQuests then
+            return false
+        end
+        self.activeQuests[questId] = true
+        return true
+    end
+    return false
+end
+
+function Player:deselectQuest(questId)
+    if self.activeQuests[questId] then
+        self.activeQuests[questId] = nil
+        local playerQuest = self.quests[questId]
+        if playerQuest and not playerQuest.completed then
+            playerQuest.currentStep = 0
+        end
+        return true
+    end
+    return false
+end
+
+function Player:isQuestActive(questId)
+    return self.activeQuests[questId] ~= nil
+end
+
+function Player:getActiveQuestsCount()
+    local count = 0
+    for _ in pairs(self.activeQuests) do
+        count = count + 1
+    end
+    return count
 end
 
 --[[ GETTERS ]]
@@ -200,6 +225,15 @@ function Player:getSkills()
     return self.skills
 end
 
+function Player:getMaxActiveQuests()
+    return self.maxActiveQuests
+end
+
+function Player:getActiveQuests()
+    return self.activeQuests
+end
+
+
 --[[ SETTERS ]]
 
 function Player:setLevel(value)
@@ -224,4 +258,12 @@ end
 
 function Player:setSkills(value)
     self.skills = value
+end
+
+function Player:setMaxActiveQuests(value)
+    self.maxActiveQuests = value
+end
+
+function Player:setActiveQuests(value)
+    self.activeQuests = value
 end

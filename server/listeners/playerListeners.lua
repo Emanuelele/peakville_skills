@@ -10,7 +10,7 @@ RegisterPlayerListener = function()
         local playerData = GetPlayerData(xPlayer.identifier)
         local player = Player:new(xPlayer, playerData)
 
-        if playerData and playerData.quests then
+        if playerData?.quests then
             player:setQuests(DeserializePlayerQuests(playerData.quests, player))
         end
 

@@ -22,6 +22,15 @@ function Tree:getRefoundPrice()
     return math.floor(self.price / 2)
 end
 
+function Tree:isLeafForPlayer(player)
+    for skillId, skill in pairs(Skills) do
+        if skill:getParentTree() == self.id and player:getSkills()[skillId] then
+            return false
+        end
+    end
+    return true
+end
+
 --[[ GETTERS ]]
 
 function Tree:getId()

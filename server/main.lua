@@ -7,6 +7,7 @@ Logger.Init()
 
 InitScript()
 RegisterPlayerListener()
+RegisterPlayerActionsListener()
 
 RegisterStaffActionsInsertListener()
 RegisterStaffActionsEditListener()
@@ -14,8 +15,12 @@ RegisterStaffActionsDeleteListener()
 
 Citizen.CreateThread(function()
     OnStop(function()
-        SaveAllPlayers()
-    end)
+        SaveAllPlayers(true)
+    end, true)
+
+    OnStop(function()
+        SaveAllPlayers(nil)
+    end, nil, true)
 
     while true do
         Citizen.Wait(Config.SavePlayersTime)

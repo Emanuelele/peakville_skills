@@ -41,6 +41,15 @@ function Skill:isUnlockable(player)
     return true
 end
 
+function Skill:isLeafForPlayer(player)
+    for _, nextSkillId in ipairs(self.nextSkills) do
+        if player:getSkills()[nextSkillId] then
+            return false
+        end
+    end
+    return true
+end
+
 
 --[[ GETTERS ]]
 

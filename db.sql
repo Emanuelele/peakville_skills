@@ -5,7 +5,9 @@ CREATE TABLE players (
     tokens INT NOT NULL DEFAULT 0,
     currentTrees JSON,
     quests JSON,
-    skills JSON
+    skills JSON,
+    maxActiveQuests INT NOT NULL DEFAULT 3,
+    activeQuests JSON
 );
 
 CREATE TABLE trees (
