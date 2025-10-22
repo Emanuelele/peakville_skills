@@ -39,6 +39,7 @@ export interface Quest {
   steps: number;
   skillsReference: number[];
   requiredQuests: number[];
+  actionConfig: Record<string, any>;
   hidden: boolean;
 }
 

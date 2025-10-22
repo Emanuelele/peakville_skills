@@ -18,7 +18,7 @@ export const truncateText = (text: string, maxLength: number): string => {
 
 export const calculateSkillTreeLayout = (
   skills: Array<{ id: number; previousSkills: number[] }>,
-  nodeSize: number,
+  _nodeSize: number,
   spacingX: number,
   spacingY: number
 ): Map<number, { x: number; y: number; level: number }> => {
@@ -43,7 +43,6 @@ export const calculateSkillTreeLayout = (
     levels.set(skillId, level);
     return level;
   };
-  
   skills.forEach(skill => calculateLevel(skill.id));
   
   const skillsByLevel = new Map<number, number[]>();

@@ -6,6 +6,7 @@ import { SkillsSection } from "./components/pages/SkillsSection";
 import { QuestsSection } from "./components/pages/QuestsSection";
 import { StaffSection } from "./components/pages/StaffSection";
 import type { InitData } from "./types";
+import './App.css';
 
 type Section = 'skills' | 'quests' | 'staff';
 
@@ -51,42 +52,66 @@ function App() {
     if (!visible || !data) return null;
 
     return (
-        <div>
-            <div>
+        <div className="app-container">
+            <div className="header">
                 <h1>Skills & Quests</h1>
-                <button onClick={handleClose}>Chiudi</button>
                 
-                {currentSection !== 'staff' && (
-                    <div>
-                        <button 
-                            onClick={() => setCurrentSection('skills')}
-                            disabled={currentSection === 'skills'}
-                        >
-                            Skills
-                        </button>
-                        <button 
-                            onClick={() => setCurrentSection('quests')}
-                            disabled={currentSection === 'quests'}
-                        >
-                            Quest
-                        </button>
-                    </div>
-                )}
+                <div className="player-stats">
+                    <span>
+                        <span>Livello</span>
+                        <strong>{data.player.level}</strong>
+                    </span>
+                    <span>
+                        <span>XP</span>
+                        <strong>{data.player.XP}</strong>
+                    </span>
+                    <span>
+                        <span>Token</span>
+                        <strong>{data.player.tokens}</strong>
+                    </span>
+                </div>
 
-                {isStaffer() && showStaffButton && currentSection !== 'staff' && (
-                    <button onClick={() => setCurrentSection('staff')}>
-                        Pannello Staff
-                    </button>
-                )}
-
-                {currentSection === 'staff' && (
-                    <button onClick={() => setCurrentSection('skills')}>
-                        Torna al Menu Principale
-                    </button>
-                )}
+                <button className="close-btn" onClick={handleClose}>×</button>
             </div>
+            
+            {currentSection !== 'staff' && (
+                <div className="tabs">
+                    <button 
+                        className={`tab ${currentSection === 'skills' ? 'active' : ''}`}
+                        onClick={() => setCurrentSection('skills')}
+                    >
+                        Skills
+                    </button>
+                    <button 
+                        className={`tab ${currentSection === 'quests' ? 'active' : ''}`}
+                        onClick={() => setCurrentSection('quests')}
+                    >
+                        Quest
+                    </button>
+                    
+                    {isStaffer() && showStaffButton && (
+                        <button 
+                            className="tab"
+                            onClick={() => setCurrentSection('staff')}
+                        >
+                            Pannello Staff
+                        </button>
+                    )}
+                </div>
+            )}
 
-            <div>
+            {currentSection === 'staff' && (
+                <div className="tabs">
+                    <button 
+                        className="tab"
+                        onClick={() => setCurrentSection('skills')}
+                    >
+                        ← Torna al Menu
+                    </button>
+                </div>
+            )}
+
+            <div className="content">
                 {currentSection === 'skills' && <SkillsSection data={data} />}
                 {currentSection === 'quests' && <QuestsSection data={data} />}
                 {currentSection === 'staff' && <StaffSection data={data} />}
