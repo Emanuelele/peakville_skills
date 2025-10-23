@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Input } from '../elements/Input';
 import { Button } from '../elements/Button';
+import { ActionConfigBuilder } from '../managers/ActionConfigBuilder';
 import { validateQuestData } from '../../utils/validation';
 import type { Quest, Skill } from '../../types';
 
@@ -8,11 +9,16 @@ interface QuestFormProps {
   quest?: Quest;
   skills: Record<string, Skill>;
   quests: Record<string, Quest>;
+  availableActions: Record<string, {
+    label: string;
+    category: string;
+    parameters?: Record<string, { type: string; required: boolean }>;
+  }>;
   onSubmit: (data: Partial<Quest>) => Promise<boolean>;
   onCancel: () => void;
 }
 
-export const QuestForm = ({ quest, skills, quests, onSubmit, onCancel }: QuestFormProps) => {
+export const QuestForm = ({ quest, skills, quests, availableActions, onSubmit, onCancel }: QuestFormProps) => {
   const [formData, setFormData] = useState({
     name: quest?.name || '',
     description: quest?.description || '',
@@ -25,9 +31,6 @@ export const QuestForm = ({ quest, skills, quests, onSubmit, onCancel }: QuestFo
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [actionConfigJson, setActionConfigJson] = useState(
-    JSON.stringify(quest?.actionConfig || {}, null, 2)
-  );
 
   useEffect(() => {
     if (quest) {
@@ -41,7 +44,6 @@ export const QuestForm = ({ quest, skills, quests, onSubmit, onCancel }: QuestFo
         actionConfig: quest.actionConfig,
         hidden: quest.hidden,
       });
-      setActionConfigJson(JSON.stringify(quest.actionConfig, null, 2));
     }
   }, [quest]);
 
@@ -57,14 +59,6 @@ export const QuestForm = ({ quest, skills, quests, onSubmit, onCancel }: QuestFo
         if (error.includes('steps')) errorMap.steps = error;
       });
       setErrors(errorMap);
-      return;
-    }
-
-    try {
-      const parsedConfig = JSON.parse(actionConfigJson);
-      formData.actionConfig = parsedConfig;
-    } catch (e) {
-      setErrors({ ...errors, actionConfig: 'JSON non valido' });
       return;
     }
 
@@ -86,7 +80,6 @@ export const QuestForm = ({ quest, skills, quests, onSubmit, onCancel }: QuestFo
         actionConfig: {},
         hidden: false
       });
-      setActionConfigJson('{}');
     }
   };
 
@@ -199,15 +192,12 @@ export const QuestForm = ({ quest, skills, quests, onSubmit, onCancel }: QuestFo
       )}
 
       <div className="input-group">
-        <label className="input-label">Action Config (JSON)</label>
-        <textarea
-          className={`input textarea code ${errors.actionConfig ? 'input-error' : ''}`}
-          value={actionConfigJson}
-          onChange={(e) => setActionConfigJson(e.target.value)}
-          rows={8}
-          placeholder='{"action": "example_action", "conditions": {}}'
+        <label className="input-label">Configurazione Azione</label>
+        <ActionConfigBuilder
+          value={formData.actionConfig}
+          onChange={(config) => setFormData({ ...formData, actionConfig: config })}
+          availableActions={availableActions}
         />
-        {errors.actionConfig && <span className="input-error-message">{errors.actionConfig}</span>}
       </div>
 
       <div className="form-actions">

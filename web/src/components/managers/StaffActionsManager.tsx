@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Modal } from '../elements/Modal';
+import { Alert } from '../elements/Alert';
+import { useAlert } from '../../hooks/useAlert';
 import { TreeForm } from '../forms/TreeForm';
 import { SkillForm } from '../forms/SkillForm';
 import { QuestForm } from '../forms/QuestForm';
@@ -10,13 +12,19 @@ import type { Tree, Skill, Quest, InitData } from '../../types';
 interface StaffActionsManagerProps {
   data: InitData;
   entityType: 'tree' | 'skill' | 'quest';
+  availableActions: Record<string, {
+    label: string;
+    category: string;
+    parameters?: Record<string, { type: string; required: boolean }>;
+  }>;
   onSuccess: () => void;
 }
 
-export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffActionsManagerProps) => {
+export const StaffActionsManagerUpdated = ({ data, entityType, availableActions, onSuccess }: StaffActionsManagerProps) => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const { isOpen, config, showAlert, closeAlert } = useAlert();
 
   const handleCreate = async (formData: Partial<Tree | Skill | Quest>): Promise<boolean> => {
     try {
@@ -32,12 +40,27 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
 
       if (success) {
         setIsCreateModalOpen(false);
+        showAlert({
+          title: 'Successo',
+          message: `${getEntityTitle()} creato con successo`,
+          type: 'success'
+        });
         onSuccess();
+      } else {
+        showAlert({
+          title: 'Errore',
+          message: `Impossibile creare ${getEntityTitle().toLowerCase()}`,
+          type: 'error'
+        });
       }
       
       return success;
     } catch (error) {
-      console.error('Errore durante la creazione:', error);
+      showAlert({
+        title: 'Errore',
+        message: `Errore durante la creazione: ${error}`,
+        type: 'error'
+      });
       return false;
     }
   };
@@ -59,18 +82,37 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
       if (success) {
         setIsEditModalOpen(false);
         setSelectedId(null);
+        showAlert({
+          title: 'Successo',
+          message: `${getEntityTitle()} modificato con successo`,
+          type: 'success'
+        });
         onSuccess();
+      } else {
+        showAlert({
+          title: 'Errore',
+          message: `Impossibile modificare ${getEntityTitle().toLowerCase()}`,
+          type: 'error'
+        });
       }
       
       return success;
     } catch (error) {
-      console.error('Errore durante la modifica:', error);
+      showAlert({
+        title: 'Errore',
+        message: `Errore durante la modifica: ${error}`,
+        type: 'error'
+      });
       return false;
     }
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Sei sicuro di voler eliminare questo elemento?')) return;
+    showAlert({
+      title: 'Conferma',
+      message: 'Sei sicuro di voler eliminare questo elemento?',
+      type: 'warning'
+    });
 
     try {
       let success = false;
@@ -84,10 +126,25 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
       }
 
       if (success) {
+        showAlert({
+          title: 'Successo',
+          message: `${getEntityTitle()} eliminato con successo`,
+          type: 'success'
+        });
         onSuccess();
+      } else {
+        showAlert({
+          title: 'Errore',
+          message: `Impossibile eliminare ${getEntityTitle().toLowerCase()}`,
+          type: 'error'
+        });
       }
     } catch (error) {
-      console.error('Errore durante l\'eliminazione:', error);
+      showAlert({
+        title: 'Errore',
+        message: `Errore durante l'eliminazione: ${error}`,
+        type: 'error'
+      });
     }
   };
 
@@ -240,6 +297,7 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
               quests={Object.fromEntries(
                 Object.entries(data.quests).map(([id, pq]) => [id, pq.quest])
               )}
+              availableActions={availableActions}
               onSubmit={handleCreate}
               onCancel={() => setIsCreateModalOpen(false)}
             />
@@ -285,6 +343,7 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
               quests={Object.fromEntries(
                 Object.entries(data.quests).map(([id, pq]) => [id, pq.quest])
               )}
+              availableActions={availableActions}
               onSubmit={handleEdit}
               onCancel={() => {
                 setIsEditModalOpen(false);
@@ -294,6 +353,14 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
           )}
         </Modal>
       )}
+
+      <Alert
+        isOpen={isOpen}
+        onClose={closeAlert}
+        title={config.title}
+        message={config.message}
+        type={config.type}
+      />
     </>
   );
 };
