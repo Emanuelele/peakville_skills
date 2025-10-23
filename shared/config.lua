@@ -12,7 +12,7 @@ Config.MaxActionBatchSize = 1000
 
 Config.Actions = {
     --Esempi di configurazione di azioni
-    --[[ ["vehicle_part_change"] = {
+    ["vehicle_part_change"] = {
         label = "Cambio Parte Veicolo",
         category = "mechanic",
         parameters = {
@@ -75,5 +75,5 @@ Config.Actions = {
             npc_id = { type = "string", required = true },
             interaction_type = { type = "string", required = false }
         }
-    }, ]]
+    },
 }

@@ -26,7 +26,7 @@ RegisterNetEvent("peakville_skills:init", function(initData)
     ClientData.trees = initData.trees
     ClientData.skills = initData.skills
     ClientData.quests = initData.quests
-    CliendData.availableActions = Config.Actions
+    ClientData.availableActions = Config.Actions
     PlayerLoaded = true
 end)
 
