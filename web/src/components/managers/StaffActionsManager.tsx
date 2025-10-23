@@ -20,7 +20,7 @@ interface StaffActionsManagerProps {
   onSuccess: () => void;
 }
 
-export const StaffActionsManagerUpdated = ({ data, entityType, availableActions, onSuccess }: StaffActionsManagerProps) => {
+export const StaffActionsManager = ({ data, entityType, availableActions, onSuccess }: StaffActionsManagerProps) => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(null);

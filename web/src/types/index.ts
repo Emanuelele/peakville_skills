@@ -54,4 +54,9 @@ export interface InitData {
   trees: Record<string, Tree>;
   skills: Record<string, Skill>;
   quests: Record<string, PlayerQuest>;
+  availableActions: Record<string, {
+    label: string;
+    category: string;
+    parameters?: Record<string, { type: string; required: boolean }>;
+  }>
 }
