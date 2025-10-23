@@ -23,7 +23,7 @@ CREATE TABLE skills (
     description TEXT,
     image VARCHAR(255),
     price INT NOT NULL DEFAULT 1,
-    parentTree INT NOT NULL,
+    parentTree VARCHAR(255) NOT NULL,
     previousSkills JSON,
     nextSkills JSON
 );
