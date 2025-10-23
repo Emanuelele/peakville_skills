@@ -52,6 +52,7 @@ export const StaffSection = ({ data }: StaffSectionProps) => {
                     <StaffActionsManager
                         data={data}
                         entityType="tree"
+                        availableActions={data.availableActions}
                         onSuccess={handleSuccess}
                     />
                 )}
@@ -60,6 +61,7 @@ export const StaffSection = ({ data }: StaffSectionProps) => {
                     <StaffActionsManager
                         data={data}
                         entityType="skill"
+                        availableActions={data.availableActions}
                         onSuccess={handleSuccess}
                     />
                 )}
@@ -68,6 +70,7 @@ export const StaffSection = ({ data }: StaffSectionProps) => {
                     <StaffActionsManager
                         data={data}
                         entityType="quest"
+                        availableActions={data.availableActions}
                         onSuccess={handleSuccess}
                     />
                 )}
