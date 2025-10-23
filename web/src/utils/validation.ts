@@ -53,7 +53,7 @@ export const validateSkillData = (data: {
   }
 
   if (data.parentTree !== undefined) {
-    if (!Number.isInteger(data.parentTree)) {
+    if (data.parentTree.length <= 0) {
       errors.push('L\'albero genitore deve essere valido');
     }
   }

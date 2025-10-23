@@ -17,9 +17,9 @@ ValidatorSchemas.Skill = {
     description = { type = "string", optional = true },
     image = { type = "string", optional = true },
     price = { type = "number", min = 1, optional = true },
-    parentTree = { type = "number", optional = true },
-    previousSkills = { type = "array", items = "number", optional = true },
-    nextSkills = { type = "array", items = "number", optional = true }
+    parentTree = { type = "string", optional = true },
+    previousSkills = { type = "array", items = "string", optional = true },
+    nextSkills = { type = "array", items = "string", optional = true }
 }
 
 ValidatorSchemas.SkillCreate = {
@@ -27,9 +27,9 @@ ValidatorSchemas.SkillCreate = {
     description = { type = "string", optional = true },
     image = { type = "string", optional = true },
     price = { type = "number", min = 1, optional = true },
-    parentTree = { type = "number" },
-    previousSkills = { type = "array", items = "number", optional = true },
-    nextSkills = { type = "array", items = "number", optional = true }
+    parentTree = { type = "string" },
+    previousSkills = { type = "array", items = "string", optional = true },
+    nextSkills = { type = "array", items = "string", optional = true }
 }
 
 ValidatorSchemas.Quest = {
@@ -37,8 +37,8 @@ ValidatorSchemas.Quest = {
     description = { type = "string", optional = true },
     XP = { type = "number", min = 1, optional = true },
     steps = { type = "number", min = 1, optional = true },
-    skillsReference = { type = "array", items = "number", optional = true },
-    requiredQuests = { type = "array", items = "number", optional = true },
+    skillsReference = { type = "array", items = "string", optional = true },
+    requiredQuests = { type = "array", items = "string", optional = true },
     actionConfig = { type = "table", optional = true },
     hidden = { type = "boolean", optional = true }
 }
@@ -48,8 +48,8 @@ ValidatorSchemas.QuestCreate = {
     description = { type = "string", optional = true },
     XP = { type = "number", min = 1, optional = true },
     steps = { type = "number", min = 1, optional = true },
-    skillsReference = { type = "array", items = "number", optional = true },
-    requiredQuests = { type = "array", items = "number", optional = true },
+    skillsReference = { type = "array", items = "string", optional = true },
+    requiredQuests = { type = "array", items = "string", optional = true },
     actionConfig = { type = "table", optional = true },
     hidden = { type = "boolean", optional = true }
 }

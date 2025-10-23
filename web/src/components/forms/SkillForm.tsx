@@ -18,7 +18,7 @@ export const SkillForm = ({ skill, trees, skills, onSubmit, onCancel }: SkillFor
     description: skill?.description || '',
     image: skill?.image || '',
     price: skill?.price || 1,
-    parentTree: skill?.parentTree || 0,
+    parentTree: skill?.parentTree || "0",
     previousSkills: skill?.previousSkills || [],
     nextSkills: skill?.nextSkills || [],
   });
