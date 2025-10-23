@@ -6,8 +6,8 @@ import type { Quest, Skill } from '../../types';
 
 interface QuestFormProps {
   quest?: Quest;
-  skills: Record<number, Skill>;
-  quests: Record<number, Quest>;
+  skills: Record<string, Skill>;
+  quests: Record<string, Quest>;
   onSubmit: (data: Partial<Quest>) => Promise<boolean>;
   onCancel: () => void;
 }
@@ -90,7 +90,7 @@ export const QuestForm = ({ quest, skills, quests, onSubmit, onCancel }: QuestFo
     }
   };
 
-  const toggleSkillReference = (skillId: number) => {
+  const toggleSkillReference = (skillId: string) => {
     setFormData({
       ...formData,
       skillsReference: formData.skillsReference.includes(skillId)
@@ -99,7 +99,7 @@ export const QuestForm = ({ quest, skills, quests, onSubmit, onCancel }: QuestFo
     });
   };
 
-  const toggleRequiredQuest = (questId: number) => {
+  const toggleRequiredQuest = (questId: string) => {
     setFormData({
       ...formData,
       requiredQuests: formData.requiredQuests.includes(questId)

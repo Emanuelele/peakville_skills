@@ -7,38 +7,38 @@ export interface PlayerData {
   level: number;
   XP: number;
   tokens: number;
-  currentTrees: Record<number, boolean>;
-  skills: Record<number, boolean>;
+  currentTrees: Record<string, boolean>;
+  skills: Record<string, boolean>;
   maxActiveQuests: number;
-  activeQuests: Record<number, boolean>;
+  activeQuests: Record<string, boolean>;
 }
 
 export interface Tree {
-  id: number;
+  id: string;
   name: string;
   description: string;
   price: number;
 }
 
 export interface Skill {
-  id: number;
+  id: string;
   name: string;
   description: string;
   image: string;
   price: number;
-  parentTree: number;
-  previousSkills: number[];
-  nextSkills: number[];
+  parentTree: string;
+  previousSkills: string[];
+  nextSkills: string[];
 }
 
 export interface Quest {
-  id: number;
+  id: string;
   name: string;
   description: string;
   XP: number;
   steps: number;
-  skillsReference: number[];
-  requiredQuests: number[];
+  skillsReference: string[];
+  requiredQuests: string[];
   actionConfig: Record<string, any>;
   hidden: boolean;
 }
@@ -51,7 +51,7 @@ export interface PlayerQuest {
 
 export interface InitData {
   player: PlayerData;
-  trees: Record<number, Tree>;
-  skills: Record<number, Skill>;
-  quests: Record<number, PlayerQuest>;
+  trees: Record<string, Tree>;
+  skills: Record<string, Skill>;
+  quests: Record<string, PlayerQuest>;
 }

@@ -5,8 +5,8 @@ import { UI_CONFIG, COLORS } from '../../config';
 
 interface SkillTreeProps {
   skills: Skill[];
-  ownedSkills: Record<number, boolean>;
-  onSkillClick: (skillId: number) => void;
+  ownedSkills: Record<string, boolean>;
+  onSkillClick: (skillId: string) => void;
   canAfford: (price: number) => boolean;
 }
 

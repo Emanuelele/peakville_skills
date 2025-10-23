@@ -23,9 +23,9 @@ RegisterNetEvent("peakville_skills:init", function(initData)
     ClientData.player.maxActiveQuests = initData.player.maxActiveQuests
     ClientData.player.activeQuests = initData.player.activeQuests
 
-    ClientData.trees = ParseTableToMap(initData.trees)
-    ClientData.skills = ParseTableToMap(initData.skills)
-    ClientData.quests = ParseTableToMap(initData.quests)
+    ClientData.trees = initData.trees
+    ClientData.skills = initData.skills
+    ClientData.quests = initData.quests
     PlayerLoaded = true
 end)
 

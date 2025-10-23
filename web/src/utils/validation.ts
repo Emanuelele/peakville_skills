@@ -30,7 +30,7 @@ export const validateSkillData = (data: {
   name?: string;
   description?: string;
   price?: number;
-  parentTree?: number;
+  parentTree?: string;
 }): { valid: boolean; errors: string[] } => {
   const errors: string[] = [];
 
@@ -53,7 +53,7 @@ export const validateSkillData = (data: {
   }
 
   if (data.parentTree !== undefined) {
-    if (!Number.isInteger(data.parentTree) || data.parentTree < 1) {
+    if (!Number.isInteger(data.parentTree)) {
       errors.push('L\'albero genitore deve essere valido');
     }
   }

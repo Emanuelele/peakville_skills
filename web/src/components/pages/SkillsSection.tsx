@@ -13,18 +13,18 @@ interface SkillsSectionProps {
 }
 
 export const SkillsSection = ({ data }: SkillsSectionProps) => {
-    const [selectedTree, setSelectedTree] = useState<number | null>(null);
-    const [selectedSkill, setSelectedSkill] = useState<number | null>(null);
+    const [selectedTree, setSelectedTree] = useState<string | null>(null);
+    const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<'grid' | 'tree'>('grid');
 
-    const handlePurchaseTree = async (treeId: number) => {
+    const handlePurchaseTree = async (treeId: string) => {
         const success = await fetchNui<boolean>('purchaseTree', treeId);
         if (!success) {
             console.error('Impossibile acquistare l\'albero');
         }
     };
 
-    const handleRefundTree = async (treeId: number) => {
+    const handleRefundTree = async (treeId: string) => {
         if (!confirm('Sei sicuro di voler rimborsare questo albero? Perderai tutte le skills associate.')) {
             return;
         }
@@ -35,7 +35,7 @@ export const SkillsSection = ({ data }: SkillsSectionProps) => {
         }
     };
 
-    const handlePurchaseSkill = async (skillId: number) => {
+    const handlePurchaseSkill = async (skillId: string) => {
         const success = await fetchNui<boolean>('purchaseSkill', skillId);
         if (!success) {
             console.error('Impossibile acquistare la skill');
@@ -43,7 +43,7 @@ export const SkillsSection = ({ data }: SkillsSectionProps) => {
         setSelectedSkill(null);
     };
 
-    const handleRefundSkill = async (skillId: number) => {
+    const handleRefundSkill = async (skillId: string) => {
         if (!confirm('Sei sicuro di voler rimborsare questa skill?')) {
             return;
         }
@@ -55,7 +55,7 @@ export const SkillsSection = ({ data }: SkillsSectionProps) => {
         setSelectedSkill(null);
     };
 
-    const getTreeSkills = (treeId: number): Skill[] => {
+    const getTreeSkills = (treeId: string): Skill[] => {
         return Object.values(data.skills).filter(skill => skill.parentTree === treeId);
     };
 
@@ -79,12 +79,12 @@ export const SkillsSection = ({ data }: SkillsSectionProps) => {
         return true;
     };
 
-    const isTreeRefundable = (treeId: number): boolean => {
+    const isTreeRefundable = (treeId: string): boolean => {
         const treeSkills = getTreeSkills(treeId);
         return treeSkills.every(skill => !data.player.skills[skill.id]);
     };
 
-    const handleSkillClick = (skillId: number) => {
+    const handleSkillClick = (skillId: string) => {
         setSelectedSkill(skillId);
     };
 

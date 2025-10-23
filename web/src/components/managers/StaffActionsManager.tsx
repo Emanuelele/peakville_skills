@@ -16,7 +16,7 @@ interface StaffActionsManagerProps {
 export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffActionsManagerProps) => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   const handleCreate = async (formData: Partial<Tree | Skill | Quest>): Promise<boolean> => {
     try {
@@ -69,7 +69,7 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
     }
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (!confirm('Sei sicuro di voler eliminare questo elemento?')) return;
 
     try {
@@ -91,7 +91,7 @@ export const StaffActionsManager = ({ data, entityType, onSuccess }: StaffAction
     }
   };
 
-  const openEditModal = (id: number) => {
+  const openEditModal = (id: string) => {
     setSelectedId(id);
     setIsEditModalOpen(true);
   };

@@ -6,8 +6,8 @@ import type { Skill, Tree } from '../../types';
 
 interface SkillFormProps {
   skill?: Skill;
-  trees: Record<number, Tree>;
-  skills: Record<number, Skill>;
+  trees: Record<string, Tree>;
+  skills: Record<string, Skill>;
   onSubmit: (data: Partial<Skill>) => Promise<boolean>;
   onCancel: () => void;
 }
@@ -67,14 +67,14 @@ export const SkillForm = ({ skill, trees, skills, onSubmit, onCancel }: SkillFor
         description: '', 
         image: '', 
         price: 1, 
-        parentTree: 0,
+        parentTree: "0",
         previousSkills: [],
         nextSkills: []
       });
     }
   };
 
-  const togglePreviousSkill = (skillId: number) => {
+  const togglePreviousSkill = (skillId: string) => {
     setFormData({
       ...formData,
       previousSkills: formData.previousSkills.includes(skillId)
@@ -131,12 +131,12 @@ export const SkillForm = ({ skill, trees, skills, onSubmit, onCancel }: SkillFor
           value={formData.parentTree}
           onChange={(e) => setFormData({ 
             ...formData, 
-            parentTree: parseInt(e.target.value),
+            parentTree: e.target.value,
             previousSkills: []
           })}
           required
         >
-          <option value={0}>Seleziona un albero</option>
+          <option value={"0"}>Seleziona un albero</option>
           {Object.values(trees).map(tree => (
             <option key={tree.id} value={tree.id}>
               {tree.name}
@@ -146,7 +146,7 @@ export const SkillForm = ({ skill, trees, skills, onSubmit, onCancel }: SkillFor
         {errors.parentTree && <span className="input-error-message">{errors.parentTree}</span>}
       </div>
 
-      {formData.parentTree > 0 && availableSkills.length > 0 && (
+      {availableSkills.length > 0 && (
         <div className="input-group">
           <label className="input-label">Skill Prerequisiti</label>
           <div className="checkbox-group">

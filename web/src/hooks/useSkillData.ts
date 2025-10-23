@@ -24,7 +24,7 @@ export const useSkillsData = () => {
     }
   }, []);
 
-  const purchaseTree = useCallback(async (treeId: number): Promise<boolean> => {
+  const purchaseTree = useCallback(async (treeId: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
     try {
@@ -38,7 +38,7 @@ export const useSkillsData = () => {
     }
   }, []);
 
-  const refundTree = useCallback(async (treeId: number): Promise<boolean> => {
+  const refundTree = useCallback(async (treeId: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
     try {
@@ -52,7 +52,7 @@ export const useSkillsData = () => {
     }
   }, []);
 
-  const purchaseSkill = useCallback(async (skillId: number): Promise<boolean> => {
+  const purchaseSkill = useCallback(async (skillId: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
     try {
@@ -66,7 +66,7 @@ export const useSkillsData = () => {
     }
   }, []);
 
-  const refundSkill = useCallback(async (skillId: number): Promise<boolean> => {
+  const refundSkill = useCallback(async (skillId: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
     try {
@@ -80,7 +80,7 @@ export const useSkillsData = () => {
     }
   }, []);
 
-  const selectQuest = useCallback(async (questId: number): Promise<boolean> => {
+  const selectQuest = useCallback(async (questId: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
     try {
@@ -94,7 +94,7 @@ export const useSkillsData = () => {
     }
   }, []);
 
-  const deselectQuest = useCallback(async (questId: number): Promise<boolean> => {
+  const deselectQuest = useCallback(async (questId: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
     try {

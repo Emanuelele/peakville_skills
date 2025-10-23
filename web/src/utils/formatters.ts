@@ -17,15 +17,15 @@ export const truncateText = (text: string, maxLength: number): string => {
 };
 
 export const calculateSkillTreeLayout = (
-  skills: Array<{ id: number; previousSkills: number[] }>,
+  skills: Array<{ id: string; previousSkills: string[] }>,
   _nodeSize: number,
   spacingX: number,
   spacingY: number
-): Map<number, { x: number; y: number; level: number }> => {
-  const positions = new Map<number, { x: number; y: number; level: number }>();
-  const levels = new Map<number, number>();
+): Map<string, { x: number; y: number; level: number }> => {
+  const positions = new Map<string, { x: number; y: number; level: number }>();
+  const levels = new Map<string, number>();
   
-  const calculateLevel = (skillId: number, visited = new Set<number>()): number => {
+  const calculateLevel = (skillId: string, visited = new Set<string>()): number => {
     if (levels.has(skillId)) return levels.get(skillId)!;
     if (visited.has(skillId)) return 0;
     
@@ -45,7 +45,7 @@ export const calculateSkillTreeLayout = (
   };
   skills.forEach(skill => calculateLevel(skill.id));
   
-  const skillsByLevel = new Map<number, number[]>();
+  const skillsByLevel = new Map<number, string[]>();
   levels.forEach((level, skillId) => {
     if (!skillsByLevel.has(level)) {
       skillsByLevel.set(level, []);

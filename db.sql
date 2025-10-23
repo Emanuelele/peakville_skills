@@ -11,14 +11,14 @@ CREATE TABLE players (
 );
 
 CREATE TABLE trees (
-    id INT PRIMARY KEY,
+    id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
     price INT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE skills (
-    id INT PRIMARY KEY,
+    id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
     image VARCHAR(255),
@@ -29,7 +29,7 @@ CREATE TABLE skills (
 );
 
 CREATE TABLE quests (
-    id INT PRIMARY KEY,
+    id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
     XP INT NOT NULL DEFAULT 1,

@@ -55,5 +55,5 @@ ValidatorSchemas.QuestCreate = {
 }
 
 ValidatorSchemas.Id = {
-    id = { type = "number", min = 1 }
+    id = { type = "string" }
 }

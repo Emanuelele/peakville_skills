@@ -29,7 +29,7 @@ GenerateNewId = function()
         end
 
         generating = false
-        return idCounter
+        return "A" .. idCounter
     else
         Citizen.Wait(0)
         goto generateId

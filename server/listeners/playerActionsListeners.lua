@@ -6,24 +6,21 @@ RegisterPlayerActionsListener = function()
             return false
         end
         local player = Players[tostring(source)]
-        if not player then print("1") return false end
+        if not player then return false end
 
         local tree = Trees[treeId]
-        if not tree then print("2") return false end
+        if not tree then return false end
 
         if player:getCurrentTrees()[treeId] then
-            print("3")
             return false
         end
 
         local tokensPrediction = player:getTokens() - tree:getPrice()
         if tokensPrediction < 0 then
-            print("4")
             return false
         end
 
         local success = player:addTree(treeId)
-        print(success)
         if success then
             player:setTokens(tokensPrediction)
             TriggerClientEvent("peakville_skills:treePurchased", source, treeId, player:getTokens())

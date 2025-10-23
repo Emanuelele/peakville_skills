@@ -9,14 +9,14 @@ interface QuestsSectionProps {
 }
 
 export const QuestsSection = ({ data }: QuestsSectionProps) => {
-    const handleSelectQuest = async (questId: number) => {
+    const handleSelectQuest = async (questId: string) => {
         const success = await fetchNui<boolean>('selectQuest', questId);
         if (!success) {
             console.error('Impossibile selezionare la quest');
         }
     };
 
-    const handleDeselectQuest = async (questId: number) => {
+    const handleDeselectQuest = async (questId: string) => {
         const success = await fetchNui<boolean>('deselectQuest', questId);
         if (!success) {
             console.error('Impossibile deselezionare la quest');
@@ -32,11 +32,11 @@ export const QuestsSection = ({ data }: QuestsSectionProps) => {
     };
 
     const activeQuests = Object.entries(data.quests)
-        .filter(([questId]) => data.player.activeQuests[parseInt(questId)])
+        .filter(([questId]) => data.player.activeQuests[questId])
         .map(([, playerQuest]) => playerQuest);
 
     const availableQuests = Object.entries(data.quests)
-        .filter(([questId]) => !data.player.activeQuests[parseInt(questId)] && !data.quests[parseInt(questId)].completed)
+        .filter(([questId]) => !data.player.activeQuests[questId] && !data.quests[questId].completed)
         .map(([, playerQuest]) => playerQuest);
 
     const completedQuests = Object.values(data.quests)
