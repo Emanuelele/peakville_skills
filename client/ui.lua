@@ -14,6 +14,11 @@ RegisterCommand('skills', function()
             action = 'init',
             data = ClientData
         })
+
+        SendNUIMessage({
+            action = 'isStaffer',
+            data = ESX.PlayerData.group ~= "user"
+        })
     else
         SendNUIMessage({
             action = 'setVisible',
@@ -101,4 +106,89 @@ end)
 RegisterNUICallback('deleteQuest', function(questId, cb)
     local success = lib.callback.await('peakville_skills:deleteQuest', false, questId)
     cb(success)
+end)
+
+RegisterNUICallback('getOnlinePlayers', function(data, cb)
+    local result = lib.callback.await('peakville_skills:getOnlinePlayers', false)
+    cb(result)
+end)
+
+RegisterNUICallback('getPlayerData', function(data, cb)
+    local result = lib.callback.await('peakville_skills:getPlayerData', false, data)
+    cb(result)
+end)
+
+RegisterNUICallback('addPlayerSkill', function(data, cb)
+    local result = lib.callback.await('peakville_skills:addPlayerSkill', false, data.targetSource, data.skillId)
+    cb(result)
+end)
+
+RegisterNUICallback('removePlayerSkill', function(data, cb)
+    local result = lib.callback.await('peakville_skills:removePlayerSkill', false, data.targetSource, data.skillId)
+    cb(result)
+end)
+
+RegisterNUICallback('addPlayerTree', function(data, cb)
+    local result = lib.callback.await('peakville_skills:addPlayerTree', false, data.targetSource, data.treeId)
+    cb(result)
+end)
+
+RegisterNUICallback('removePlayerTree', function(data, cb)
+    local result = lib.callback.await('peakville_skills:removePlayerTree', false, data.targetSource, data.treeId)
+    cb(result)
+end)
+
+RegisterNUICallback('setPlayerXP', function(data, cb)
+    local result = lib.callback.await('peakville_skills:setPlayerXP', false, data.targetSource, data.amount)
+    cb(result)
+end)
+
+RegisterNUICallback('addPlayerXP', function(data, cb)
+    local result = lib.callback.await('peakville_skills:addPlayerXP', false, data.targetSource, data.amount)
+    cb(result)
+end)
+
+RegisterNUICallback('removePlayerXP', function(data, cb)
+    local result = lib.callback.await('peakville_skills:removePlayerXP', false, data.targetSource, data.amount)
+    cb(result)
+end)
+
+RegisterNUICallback('setPlayerTokens', function(data, cb)
+    local result = lib.callback.await('peakville_skills:setPlayerTokens', false, data.targetSource, data.amount)
+    cb(result)
+end)
+
+RegisterNUICallback('addPlayerTokens', function(data, cb)
+    local result = lib.callback.await('peakville_skills:addPlayerTokens', false, data.targetSource, data.amount)
+    cb(result)
+end)
+
+RegisterNUICallback('removePlayerTokens', function(data, cb)
+    local result = lib.callback.await('peakville_skills:removePlayerTokens', false, data.targetSource, data.amount)
+    cb(result)
+end)
+
+RegisterNUICallback('setPlayerLevel', function(data, cb)
+    local result = lib.callback.await('peakville_skills:setPlayerLevel', false, data.targetSource, data.level)
+    cb(result)
+end)
+
+RegisterNUICallback('setPlayerQuestSteps', function(data, cb)
+    local result = lib.callback.await('peakville_skills:setPlayerQuestSteps', false, data.targetSource, data.questId, data.steps)
+    cb(result)
+end)
+
+RegisterNUICallback('completePlayerQuest', function(data, cb)
+    local result = lib.callback.await('peakville_skills:completePlayerQuest', false, data.targetSource, data.questId)
+    cb(result)
+end)
+
+RegisterNUICallback('uncompletePlayerQuest', function(data, cb)
+    local result = lib.callback.await('peakville_skills:uncompletePlayerQuest', false, data.targetSource, data.questId)
+    cb(result)
+end)
+
+RegisterNUICallback('assignHiddenQuest', function(data, cb)
+    local result = lib.callback.await('peakville_skills:assignHiddenQuest', false, data.targetSource, data.questId)
+    cb(result)
 end)

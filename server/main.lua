@@ -15,6 +15,8 @@ RegisterStaffActionsInsertListener()
 RegisterStaffActionsEditListener()
 RegisterStaffActionsDeleteListener()
 
+RegisterStaffPlayerActionsListener()
+
 Citizen.CreateThread(function()
     OnStop(function()
         SaveAllPlayers(true)

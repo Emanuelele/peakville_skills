@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { StaffActionsManager } from '../managers/StaffActionsManager';
+import { PlayerManagement } from '../managers/PlayerManagement';
 import type { InitData } from '../../types';
 
 interface StaffSectionProps {
     data: InitData;
 }
 
-type StaffTab = 'trees' | 'skills' | 'quests';
+type StaffTab = 'players' | 'trees' | 'skills' | 'quests';
 
 export const StaffSection = ({ data }: StaffSectionProps) => {
-    const [activeTab, setActiveTab] = useState<StaffTab>('trees');
+    const [activeTab, setActiveTab] = useState<StaffTab>('players');
 
     const handleSuccess = () => {
     };
@@ -22,32 +23,36 @@ export const StaffSection = ({ data }: StaffSectionProps) => {
 
             <div className="tabs">
                 <button 
+                    className={`tab ${activeTab === 'players' ? 'active' : ''}`}
+                    onClick={() => setActiveTab('players')}
+                >
+                    Gestione Player
+                </button>
+                <button 
                     className={`tab ${activeTab === 'trees' ? 'active' : ''}`}
-                    onClick={() => {
-                        setActiveTab('trees');
-                    }}
+                    onClick={() => setActiveTab('trees')}
                 >
                     Alberi
                 </button>
                 <button 
                     className={`tab ${activeTab === 'skills' ? 'active' : ''}`}
-                    onClick={() => {
-                        setActiveTab('skills');
-                    }}
+                    onClick={() => setActiveTab('skills')}
                 >
                     Skills
                 </button>
                 <button 
                     className={`tab ${activeTab === 'quests' ? 'active' : ''}`}
-                    onClick={() => {
-                        setActiveTab('quests');
-                    }}
+                    onClick={() => setActiveTab('quests')}
                 >
                     Quest
                 </button>
             </div>
 
             <div className="content">
+                {activeTab === 'players' && (
+                    <PlayerManagement data={data} />
+                )}
+
                 {activeTab === 'trees' && (
                     <StaffActionsManager
                         data={data}
