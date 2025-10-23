@@ -29,11 +29,12 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(Config.SavePlayersTime)
         SaveAllPlayers()
+        Logger.Info("Saved " .. #GetPlayers() .. " players")
     end
 end)
 
 Citizen.CreateThread(function()
-    Citizen.Wait(5000)
+    Citizen.Wait(2000)
     for _, src in ipairs(GetPlayers()) do
         if ESX.GetPlayerFromId(src) then
             LoadPlayer(src)
